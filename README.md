@@ -10,8 +10,7 @@
    1. Open 2016 folder on command prompt
    2. Run `npm install`
    3. Open 2016 folder with Visual Studio Code
-   4. Press Ctrl + Shift + B, which will run the default tasks
-   5. Compiled files are copied to folder dist
+   4. Press Ctrl + Shift + B, which will run the default tasks/ Or simply run `gulp` from command prompt.
+   5. Compiled files are copied to "dist" folder
    6. To test a particular day from command prompt, run `node dist\01`
-   7. Inputs are stored in seperate files
-   8. All days are written as tests cases
+   7. All days are written like tests cases with utility method "Assert"

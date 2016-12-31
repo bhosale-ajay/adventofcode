@@ -1,0 +1,20 @@
+{
+  "name": "adventofcode-2016-ts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "author": "Ajay Bhosale",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-transform-es2015-destructuring": "^6.19.0",
+    "babel-plugin-transform-es2015-parameters": "^6.18.0",
+    "babel-plugin-transform-es2015-spread": "^6.8.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^1.9.1",
+    "gulp-typescript": "^3.1.3",
+    "tslint": "^4.0.2",
+    "typescript": "^2.0.10"
+  },
+  "dependencies": {}
+}
