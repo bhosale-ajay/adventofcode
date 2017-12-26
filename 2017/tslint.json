@@ -1,0 +1,17 @@
+﻿{
+  "extends": "tslint:recommended",
+  "rules": {
+    "no-trailing-whitespace": true,
+    "trailing-comma": [ false ],
+    "object-literal-sort-keys": false,
+    "object-literal-key-quotes": [false],
+    "no-reference": false,
+    "max-line-length": [ false, 120 ],
+    "align": [ true ],
+    "no-console": [ false ],
+    "no-string-literal": false,
+    "no-bitwise": false,
+    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
+    "arrow-parens": false
+  }
+}
