@@ -3,18 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": ">=9.3.0"
+    "node": ">=10.9.0"
   },
-  "scripts": {},
+  "scripts": {
+    "build": "webpack && node dist/run",
+    "lint" : "tslint './src/*.ts'"
+  },
   "author": "Ajay Bhosale",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^8.5.1",
-    "gulp": "^3.9.1",
-    "gulp-sourcemaps": "^2.6.1",
-    "gulp-typescript": "^3.2.3",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.2"
+    "@types/node": "^10.9.4",
+    "awesome-typescript-loader": "^5.2.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3",
+    "webpack": "^4.17.2",
+    "webpack-cli": "^3.1.0"
   },
   "dependencies": {}
 }

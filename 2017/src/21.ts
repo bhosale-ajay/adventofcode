@@ -18,7 +18,7 @@ const c2 = ([a, b, c, d]) => [
     r2([a, b, c, d]), r2([c, a, d, b]), r2([d, c, b, a]), r2([b, d, a, c]),
     r2([c, d, a, b]), r2([a, c, b, d]), r2([b, a, d, c]), r2([d, b, c, a])];
 const pixels = r => r.replace(/\//g, "").split("");
-const combinations = rule => (rule.length === 5 ? c2 : c3)(pixels(rule));
+const combinations = rule => ((rule.length === 5 ? c2 : c3) as any)(pixels(rule));
 const transform = (grid, rules) => {
     if (grid.length < 16) {
         return rules[grid];
