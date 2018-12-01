@@ -1,0 +1,21 @@
+{
+  "name": "advent-of-code-2018-typescript",
+  "version": "1.0.0",
+  "description": "Advent of code 2018 solutions with typescript",
+  "main": "index.js",
+  "author": "Ajay Bhosale",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --env=node --colors --detectOpenHandles"
+  },
+  "devDependencies" : {
+    "@types/jest": "^23.3.10",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.1"
+  },
+  "dependencies": {
+    "dotless": "^1.0.0-beta.4"
+  }
+}
