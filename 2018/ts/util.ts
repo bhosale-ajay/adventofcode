@@ -7,7 +7,7 @@ export function* cycle<T>(input: Iterable<T>) {
 }
 
 export function getInput(day: string) {
-    return readFileSync(`../inputs/${day}.txt`, "utf8");
+    return readFileSync(`../inputs/${day}.txt`, "utf8").replace(/\r/g, "");
 }
 
 export function seenBefore<T, TKey = T>(seed: TKey[], keyMaker: (i: T) => TKey = _ => _ as unknown as TKey) {
