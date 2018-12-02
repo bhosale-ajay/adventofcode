@@ -1,11 +1,4 @@
-export const test01 = "+1, +1, +1".split(",").map(n => +n);
-export const test02 = "+1, +1, -2".split(",").map(n => +n);
-export const test03 = "-1, -2, -3".split(",").map(n => +n);
-export const test04 = "+1, -1".split(",").map(n => +n);
-export const test05 = "+3, +3, +4, -2, -4".split(",").map(n => +n);
-export const test06 = "-6, +3, +8, +5, -6".split(",").map(n => +n);
-export const test07 = "+7, +7, -2, -7, -4".split(",").map(n => +n);
-export const puzzleInput = `-1
+-1
 -7
 -5
 -16
@@ -990,4 +983,4 @@ export const puzzleInput = `-1
 -7
 +10
 -6
-+125648`.split("\n").map(n => +n);
++125648
