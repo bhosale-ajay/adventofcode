@@ -1,5 +1,9 @@
 import { readFileSync } from "fs";
 
+export interface Dictionary<T> {
+    [key: string]: T;
+}
+
 export function* cycle<T>(input: Iterable<T>) {
     while (true) {
         yield* input;
@@ -21,4 +25,11 @@ export function seenBefore<T, TKey = T>(seed: TKey[], keyMaker: (i: T) => TKey =
             return false;
         }
     };
+}
+
+export function getValue<T>(dictionary: Dictionary<T>, key: string, defaultValue: T): T {
+    if (dictionary[key] === undefined) {
+        dictionary[key] = defaultValue;
+    }
+    return dictionary[key];
 }

@@ -1,9 +1,5 @@
 import { matchesToArray } from "dotless";
-import { getInput } from "./util";
-
-interface Dictionary<T> {
-    [key: string]: T;
-}
+import { Dictionary, getInput } from "./util";
 
 interface Claim {
     id: number;
