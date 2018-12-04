@@ -82,7 +82,7 @@ defmodule D02P02 do
     |> Enum.map(fn l -> String.split(l, "", trim: true) end)
     |> find_matching_ids()
     |> common_letters_from_match()
-    end
+  end
 end
 
 12   = find_check_sum.(test_01)
