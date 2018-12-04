@@ -1,4 +1,4 @@
-import { first, matchesToArray, query } from "dotless";
+import { matchesToArray } from "dotless";
 import { getInput } from "./util";
 
 interface Dictionary<T> {
@@ -24,23 +24,26 @@ const getSquares = ([_, tx, ty, width, height]: number[]) => {
     return result;
 };
 
-const claimSquares = ([fabric, disputed]: [Dictionary<number>, number], claim: Claim) => {
+const claimSquares = ([fabric, disputed, candidates]: [Dictionary<number>, number, Claim[]], claim: Claim) => {
+    let hasClaimForAllSquares = true;
     claim.squares.forEach(s => {
         const currentClaims = (fabric[s] | 0);
         if (currentClaims === 1) {
             disputed = disputed + 1;
+            hasClaimForAllSquares = false;
         }
         fabric[s] = currentClaims + 1;
     });
-    return [fabric, disputed];
+    if (hasClaimForAllSquares) {
+        candidates.push(claim);
+    }
+    return [fabric, disputed, candidates];
 };
 
 const sliceIt = (claims: Claim[]) => {
-    const [fabric, disputed] = claims.reduce(claimSquares, [{}, 0]) as [Dictionary<number>, number];
-    const undisputedClaim = query(claims,
-                             first(c => c.squares.every(s => fabric[s] === 1)),
-                             c => c ? c.id : null);
-    return [ disputed, undisputedClaim ];
+    const [fabric, disputed, candidates] = claims.reduce(claimSquares, [{}, 0, []]) as [Dictionary<number>, number, Claim[]];
+    const undisputedClaim = candidates.find(c => c.squares.every(s => fabric[s] === 1));
+    return [ disputed, undisputedClaim ? undisputedClaim.id : null ];
 };
 
 test("03", () => {
