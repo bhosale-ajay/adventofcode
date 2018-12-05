@@ -11,9 +11,10 @@ parse = fn s ->
   |> to_charlist()
 end
 
-reduce_polymer = fn units ->
+reduce_polymer = fn units, ignore ->
   units
   |> Enum.reduce([], fn
+    u, acc when u == ignore or u == ignore + 32 -> acc
     u, [] -> [u]
     u, [un | rest] -> if abs(u - un) == 32, do: rest, else: [u, un | rest]
   end)
@@ -22,16 +23,15 @@ end
 
 optimal_solution = fn units ->
   Enum.to_list(65..90)
-  |> Enum.map((&(Enum.filter(units, fn u -> !(u === &1 or u === &1 + 32) end))))
-  |> Enum.map(reduce_polymer)
+  |> Enum.map(&(reduce_polymer.(units, &1)))
   |> Enum.min()
 end
 
 test_01 = parse.("dabAcCaCBAcCcaDA")
-10 = reduce_polymer.(test_01)
+10 = reduce_polymer.(test_01, 0)
 4 = optimal_solution.(test_01)
 puzzle_input = parse.(get_content.("../inputs/05.txt"))
-9808 = reduce_polymer.(puzzle_input)
+9808 = reduce_polymer.(puzzle_input, 0)
 6484 = optimal_solution.(puzzle_input)
 
 IO.puts("Done")
