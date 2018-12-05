@@ -1,4 +1,4 @@
-import { ascendingBy, countBy, descendingBy, first, matchesToArray, query, reduce, sort } from "dotless";
+import { ascendingBy, countBy, matchesToArray, query, reduce, sort } from "dotless";
 import { Dictionary, getInput, getValue } from "./util";
 
 interface LogEntry {
@@ -30,22 +30,18 @@ const prepareLogs = ({lastGuard, fallAt, logs}: LogProcessData, {min, action, gu
 const sleepSummary = (sleepRecords: number[]) => query(
     sleepRecords,
     countBy(),
-    cs => Object.keys(cs).map(k => [+k, cs[k]]),
-    sort(descendingBy(x => x[1])),
-    first()
+    cs => Object.keys(cs).reduce(([m, sd], k) => cs[k] > sd ? [k, cs[k]] : [m, sd], ([0, 0])),
 );
-const sortAndFind = (r: [number[]], f: number) => query(
-    r,
-    sort(descendingBy(x => x[f])),
-    first(),
-    g => g !== null ? g[0] * g[2] : 0
+const findMax = (r: [number[]], f: number) => query(
+    r.reduce((acc, gr) => gr[f] > acc[f] ? gr : acc),
+    g => g[0] * g[2]
 );
 const findResponseRecord = (s: string) => query(
     matchesToArray(s, regex, parseLine),
     sort(ascendingBy(x => x.timeStamp)),
     reduce(prepareLogs, { lastGuard : "", fallAt : 0, logs: ({} as Dictionary<number[]>) }),
     ({ logs }) => Object.keys(logs).map(g => ([+g, logs[g].length, ...sleepSummary(logs[g])])) as [number[]],
-    r => [sortAndFind(r, 1), sortAndFind(r, 3)]
+    r => [findMax(r, 1), findMax(r, 3)]
 );
 test("04", () => {
     expect(findResponseRecord(getInput("04-test"))).toEqual([240, 4455]);

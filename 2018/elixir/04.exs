@@ -31,17 +31,13 @@ end
 build_report = fn sl ->
   sl
   |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end)
-  |> Enum.to_list()
-  |> Enum.sort_by(&(elem(&1, 1)))
-  |> List.last()
-  |> Tuple.to_list()
+  |> Enum.reduce([0, 0], fn {ik, iv}, [mk, mv] -> if iv > mv, do: [ik, iv], else: [mk, mv] end)
 end
 
 solve = fn l, s ->
   l
-  |> Enum.sort_by(&Enum.at(&1, s))
-  |> List.last()
-  |> (fn [g, _, m, _] -> g * m end).()
+  |> Enum.reduce(fn mg, g -> if Enum.at(mg, s) > Enum.at(g, s), do: mg, else: g end)
+  |> (&(Enum.at(&1, 0) * Enum.at(&1, 2))).()
 end
 
 response_record = fn ip ->
