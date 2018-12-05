@@ -1,4 +1,4 @@
-import { ascendingBy, matchesToArray, query, reduce, sort } from "dotless";
+import { ascendingBy, countBy, descendingBy, first, matchesToArray, query, reduce, sort } from "dotless";
 import { Dictionary, getInput, getValue } from "./util";
 
 interface LogEntry {
@@ -7,65 +7,46 @@ interface LogEntry {
     action: string;
     guard: string;
 }
-interface GuardLog {
-    total: number;
-    mostSleptMin: number;
-    sleepLog: Dictionary<number>;
-}
 interface LogProcessData {
     lastGuard: string;
     fallAt: number;
-    lazyGuard: string | null;
-    logs: Dictionary<GuardLog>;
+    logs: Dictionary<number[]>;
 }
 const regex = /\[(\d+-\d+-\d+\s\d+:(\d+))]\s(falls|wakes|Guard #(\d+))/gm;
 const parseLine = (m: RegExpExecArray): LogEntry => ({timeStamp: m[1], min: +m[2], action: m[3], guard: m[4]});
-const prepareLogs = ({lastGuard, fallAt, lazyGuard, logs}: LogProcessData,
-                     {min, action, guard}: LogEntry): LogProcessData => {
+const prepareLogs = ({lastGuard, fallAt, logs}: LogProcessData, {min, action, guard}: LogEntry) => {
     if (action === "falls") {
-        return {lastGuard, fallAt: min, lazyGuard, logs};
+        return {lastGuard, fallAt: min, logs};
     } else if (action === "wakes") {
-        const guardLogs = getValue<GuardLog>(logs, lastGuard, { total : 0, mostSleptMin : 0, sleepLog: {} });
-        guardLogs.total = guardLogs.total + min - fallAt;
+        const guardLogs = getValue<number[]>(logs, lastGuard, []);
         for (let time = fallAt; time < min; time++) {
-            guardLogs.sleepLog[time] = (guardLogs.sleepLog[time] | 0) + 1;
-            if (guardLogs.sleepLog[time] > (guardLogs.sleepLog[guardLogs.mostSleptMin] | 0)) {
-                guardLogs.mostSleptMin = time;
-            }
+            guardLogs.push(time);
         }
-        if (lazyGuard === null) {
-            lazyGuard = lastGuard;
-        } else if (logs[lazyGuard].total < guardLogs.total) {
-            lazyGuard = lastGuard;
-        }
-        return {lastGuard, fallAt, lazyGuard, logs};
+        return {lastGuard, fallAt, logs};
     } else {
-        return {lastGuard: guard, fallAt , lazyGuard, logs};
+        return {lastGuard: guard, fallAt , logs};
     }
 };
-
-const findResponseRecord = (s: string) => {
-    const { lazyGuard, logs } = query(
-        matchesToArray(s, regex, parseLine),
-        sort(ascendingBy(x => x.timeStamp)),
-        reduce(prepareLogs, { lastGuard : "", fallAt : 0, lazyGuard : null, logs: {} }),
-    );
-    let [mostSleptMin, mostSlept, mostSleptGuard] = [0, 0, ""];
-    Object.keys(logs).forEach(guard => {
-        const guardMostSleptMin = logs[guard].mostSleptMin;
-        const guardMostSlept = logs[guard].sleepLog[guardMostSleptMin];
-        if (guardMostSlept > mostSlept) {
-            mostSlept = guardMostSlept;
-            mostSleptMin = guardMostSleptMin;
-            mostSleptGuard = guard;
-        }
-    });
-    return [
-        lazyGuard !== null ? +lazyGuard * logs[lazyGuard].mostSleptMin : 0,
-        +mostSleptMin * +mostSleptGuard
-    ];
-};
-
+const sleepSummary = (sleepRecords: number[]) => query(
+    sleepRecords,
+    countBy(),
+    cs => Object.keys(cs).map(k => [+k, cs[k]]),
+    sort(descendingBy(x => x[1])),
+    first()
+);
+const sortAndFind = (r: [number[]], f: number) => query(
+    r,
+    sort(descendingBy(x => x[f])),
+    first(),
+    g => g !== null ? g[0] * g[2] : 0
+);
+const findResponseRecord = (s: string) => query(
+    matchesToArray(s, regex, parseLine),
+    sort(ascendingBy(x => x.timeStamp)),
+    reduce(prepareLogs, { lastGuard : "", fallAt : 0, logs: ({} as Dictionary<number[]>) }),
+    ({ logs }) => Object.keys(logs).map(g => ([+g, logs[g].length, ...sleepSummary(logs[g])])) as [number[]],
+    r => [sortAndFind(r, 1), sortAndFind(r, 3)]
+);
 test("04", () => {
     expect(findResponseRecord(getInput("04-test"))).toEqual([240, 4455]);
     expect(findResponseRecord(getInput("04"))).toEqual([138280, 89347]);
