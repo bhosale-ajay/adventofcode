@@ -16,7 +16,8 @@ reduce_polymer = fn units, ignore ->
   |> Enum.reduce([], fn
     u, acc when u == ignore or u == ignore + 32 -> acc
     u, [] -> [u]
-    u, [un | rest] -> if abs(u - un) == 32, do: rest, else: [u, un | rest]
+    u, [un | rest] when abs(u - un) == 32 -> rest
+    u, [un | rest] -> [u, un | rest]
   end)
   |> Enum.count()
 end
