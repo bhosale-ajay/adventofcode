@@ -33,3 +33,30 @@ export function getValue<T>(dictionary: Dictionary<T>, key: string, defaultValue
     }
     return dictionary[key];
 }
+
+export function generate<T>(fromX: number, toX: number, fromY: number, toY: number, action: (x: number, y: number) => T) {
+    const result: T[] = [];
+    for (let x = fromX; x <= toX; x++) {
+        for (let y = fromY; y <= toY; y++) {
+            result.push(action(x, y));
+        }
+    }
+    return result;
+}
+
+export function each<T1>(outer: T1[], action: (x: T1) => void) {
+    const outerLength = outer.length;
+    for (let outerIndex = 0; outerIndex < outerLength; outerIndex++) {
+        action(outer[outerIndex]);
+    }
+}
+
+export function nestedEach<T1, T2>(outer: T1[], inner: T2[], action: (x: T1, y: T2) => void) {
+    const outerLength = outer.length;
+    const innerLength = inner.length;
+    for (let outerIndex = 0; outerIndex < outerLength; outerIndex++) {
+        for (let innerIndex = 0; innerIndex < innerLength; innerIndex++) {
+            action(outer[outerIndex], inner[innerIndex]);
+        }
+    }
+}

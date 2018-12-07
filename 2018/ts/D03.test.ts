@@ -1,5 +1,5 @@
 import { matchesToArray } from "dotless";
-import { Dictionary, getInput } from "./util";
+import { Dictionary, generate, getInput } from "./util";
 
 interface Claim {
     id: number;
@@ -10,15 +10,7 @@ const parse = (s: string) => s.split("\n")
         .map(l => matchesToArray(l, /\d+/g, m => +m[0]))
         .map(ns => ({ id: ns[0], squares: getSquares(ns)}));
 
-const getSquares = ([_, tx, ty, width, height]: number[]) => {
-    const result = [];
-    for (let x = tx; x < tx + width; x++) {
-        for (let y = ty; y < ty + height; y++) {
-            result.push(`S${x}_${y}`);
-        }
-    }
-    return result;
-};
+const getSquares = ([, tx, ty, width, height]: number[]) => generate(tx, tx + width - 1, ty, ty + height - 1, (x, y) => `S${x}_${y}`);
 
 const claimSquares = ([fabric, disputed, candidates]: [Dictionary<number>, number, Claim[]], claim: Claim) => {
     let hasClaimForAllSquares = true;
