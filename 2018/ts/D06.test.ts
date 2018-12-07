@@ -1,8 +1,7 @@
-import { each, generate, getInput, nestedEach } from "./util";
+import { countBy, filter, query } from "dotless";
+import { generate, getInput } from "./util";
 
 interface Location {
-    x: number;
-    y: number;
     onEdge: boolean;
     closeTo: number;
     distance: number;
@@ -13,55 +12,57 @@ interface Area {
     name: number;
     x: number;
     y: number;
-    size: number;
-    isInfinite: boolean;
 }
 
 const [MAX, NONE, MANY] = [Number.MAX_SAFE_INTEGER, -1, -1];
 
 const parse = (s: string) => getInput(s).split("\n").map((l, name) => {
     const [x, y] = l.split(",").map(c => +c);
-    return { name, x, y, size : 0, isInfinite : false } as Area;
+    return { name, x, y } as Area;
 });
 
 const findGridDimensions = (areas: Area[]) => areas.reduce(([minX, minY, maxX, maxY], {x, y}) => ([
-    Math.min(minX, x),
-    Math.min(minY, y),
-    Math.max(maxX, x),
-    Math.max(maxY, y),
+    Math.min(minX, x), Math.min(minY, y), Math.max(maxX, x), Math.max(maxY, y)
 ]), [MAX, MAX, 0, 0]);
 
-const getLocations = ([minX, minY, maxX, maxY]: number[]) => generate(minX, maxX, minY, maxY, (x, y) => ({
-    x, y, closeTo: NONE, distance: MAX, totalDistance: 0,
-    onEdge : (x === minX) || (y === minY) || (x === maxX) || (y === maxY),
-}));
-
-const claimLocation = ({name, x, y}: Area, l: Location) => {
-    const distance = Math.abs(x - l.x) + Math.abs(y - l.y);
-    l.totalDistance = l.totalDistance + distance;
-    if (distance < l.distance) {
-        l.distance = distance;
-        l.closeTo = name;
-    } else if (distance === l.distance) {
-        l.closeTo = MANY;
-    }
-};
-
-const updateSize = (areas: Area[], location: Location) => {
-    if (location.closeTo !== MANY) {
-        const area = areas[location.closeTo];
-        area.size = area.size + 1;
-        area.isInfinite = area.isInfinite || location.onEdge;
-    }
+const getLocations = (areas: Area[]) => {
+    const [minX, minY, maxX, maxY] = findGridDimensions(areas);
+    return generate<Location>(minX, maxX, minY, maxY, (lx, ly) => {
+        const l = {
+            closeTo: NONE,
+            distance: MAX,
+            totalDistance: 0,
+            onEdge: (lx === minX) || (ly === minY) || (lx === maxX) || (ly === maxY),
+        };
+        for (const {name, x, y} of areas) {
+            const distance = Math.abs(x - lx) + Math.abs(y - ly);
+            l.totalDistance = l.totalDistance + distance;
+            if (distance < l.distance) {
+                l.distance = distance;
+                l.closeTo = name;
+            } else if (distance === l.distance) {
+                l.closeTo = MANY;
+            }
+        }
+        return l;
+    });
 };
 
 const solveChronalCoordinates = (ip: string, totalDistance: number) => {
     const areas = parse(ip);
-    const locations = getLocations(findGridDimensions(areas));
-    nestedEach(areas, locations, claimLocation);
-    each(locations, l => updateSize(areas, l));
+    const locations = getLocations(areas);
+    const infiniteAreas = query(locations,
+        filter(l => l.onEdge === true),
+        countBy("closeTo"),
+        cs => Object.keys(cs).map(k => +k)
+    );
+    const isFinite = (id: number) => !infiniteAreas.some(ia => ia === id);
     return [
-        areas.filter(a => !a.isInfinite).reduce((ms, a) => Math.max(a.size, ms), 0),
+        query(locations,
+            filter(l => l.closeTo !== MANY && isFinite(l.closeTo)),
+            countBy("closeTo"),
+            cs => Object.keys(cs).reduce((acc, k) => Math.max(acc, cs[k]), 0)
+        ),
         locations.filter(l => l.totalDistance < totalDistance).length
     ];
 };

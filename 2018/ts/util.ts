@@ -43,20 +43,3 @@ export function generate<T>(fromX: number, toX: number, fromY: number, toY: numb
     }
     return result;
 }
-
-export function each<T1>(outer: T1[], action: (x: T1) => void) {
-    const outerLength = outer.length;
-    for (let outerIndex = 0; outerIndex < outerLength; outerIndex++) {
-        action(outer[outerIndex]);
-    }
-}
-
-export function nestedEach<T1, T2>(outer: T1[], inner: T2[], action: (x: T1, y: T2) => void) {
-    const outerLength = outer.length;
-    const innerLength = inner.length;
-    for (let outerIndex = 0; outerIndex < outerLength; outerIndex++) {
-        for (let innerIndex = 0; innerIndex < innerLength; innerIndex++) {
-            action(outer[outerIndex], inner[innerIndex]);
-        }
-    }
-}
