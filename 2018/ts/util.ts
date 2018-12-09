@@ -67,10 +67,8 @@ export class LinkedList<T> {
     }
 
     public remove(node: Node<T>) {
-        if (this.length > 1 && node.prev != null && node.next != null) {
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-        }
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
         (node as any).prev = null;
         (node as any).next = null;
         this.length--;
