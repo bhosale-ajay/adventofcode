@@ -43,3 +43,49 @@ export function generate<T>(fromX: number, toX: number, fromY: number, toY: numb
     }
     return result;
 }
+
+export interface Node<T> {
+    value: T;
+    prev: Node<T>;
+    next: Node<T>;
+}
+export class LinkedList<T> {
+    private length = 0;
+
+    public get count() {
+        return this.length;
+    }
+
+    public init(value: T): Node<T> {
+        const node: any = {
+            value
+        };
+        node.prev = node;
+        node.next = node;
+        this.length = 1;
+        return node as Node<T>;
+    }
+
+    public remove(node: Node<T>) {
+        if (this.length > 1 && node.prev != null && node.next != null) {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
+        (node as any).prev = null;
+        (node as any).next = null;
+        this.length--;
+    }
+
+    public insertAfter(node: any, value: T) {
+        const currentNext = node.next;
+        const newNode = {
+            value,
+            prev: node,
+            next: currentNext
+        };
+        node.next = newNode;
+        currentNext.prev = newNode;
+        this.length++;
+        return newNode;
+    }
+}
