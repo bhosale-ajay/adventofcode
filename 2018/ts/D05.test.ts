@@ -19,7 +19,7 @@ const findOptimalSolution = (units: number[]) => query(
     reduce((acc, l) => acc < l ? acc : l, Number.MAX_SAFE_INTEGER)
 );
 
-test("04", () => {
+test("05", () => {
     const test01 = parse("dabAcCaCBAcCcaDA");
     const puzzleInput = parse(getInput("05"));
     expect(reducePolymer(parse("aA"))).toEqual(0);
