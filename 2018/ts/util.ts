@@ -87,3 +87,24 @@ export class LinkedList<T> {
         return newNode;
     }
 }
+
+export function count<TSource>(predicate: (item: TSource) => boolean = _ => true) {
+    return (source: Iterable<TSource>) => {
+        let countOfItems = 0;
+        for (const item of source) {
+            if (predicate(item)) {
+                countOfItems = countOfItems + 1;
+            }
+        }
+        return countOfItems;
+    };
+}
+
+export function each<TSource>(action: (item: TSource) => void) {
+    return function*(source: Iterable<TSource>) {
+        for (const item of source) {
+            action(item);
+            yield item;
+        }
+    };
+}
