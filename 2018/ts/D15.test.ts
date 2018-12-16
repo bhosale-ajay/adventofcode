@@ -29,9 +29,7 @@ const parse = (ip: string) => getInput(ip).split("\n")
 const sortUnits = sort<Unit>(ascendingBy("y"), ascendingBy("x"));
 const getPlacesToMove = (cave: Cave, fx: number, fy: number, visited: Dictionary<boolean>, opponent: string) => {
     const result = [[fx, fy - 1], [fx - 1, fy], [fx + 1, fy], [fx, fy + 1]];
-    return result.filter(([x, y]) => 0 <= y && y <= cave.length &&
-                              0 <= x && x <= cave[0].length &&
-                              visited[pathKey(x, y)] !== true &&
+    return result.filter(([x, y]) => visited[pathKey(x, y)] !== true &&
                               (cave[y][x] === OPEN || cave[y][x] === opponent));
 };
 const move = (cave: Cave, unit: Unit) => {
@@ -87,19 +85,36 @@ const attack = (cave: Cave, units: Unit[], {x, y, type, power }: Unit) => {
     }
     return null;
 };
-const draw = (roundCounter: number, cave: Cave, units: Unit[]) => {
-    let m = `\n After ${roundCounter} rounds:\n`;
+const draw = (roundCounter: number, cave: Cave, units: Unit[], power: number) => {
+    let m = `\n After ${roundCounter} rounds, power ${power}:\n`;
     for (let y = 0; y < cave.length; y++) {
         let pm = "";
         for (let x = 0; x < cave[y].length; x++) {
-            m = m + cave[y][x];
+            let char = " ";
+            if (cave[y][x] === "E") {
+                char = "\u001b[32mE\u001b[39m";
+            } else if (cave[y][x] === "G") {
+                char = "\u001b[33mG\u001b[39m";
+            } else if (cave[y][x] === "#") {
+                char = "#";
+            }
+            m = m + char;
             if (cave[y][x] === E || cave[y][x] === G) {
                 pm = pm + cave[y][x] + "(" + (units.find(u => u.x === x && u.y === y) as any).hit + ") ";
             }
         }
         m = m + "\t" + pm + "\n";
     }
+    console.clear();
     console.log(m);
+    // to add delay to capture the video
+    for (let i = 0; i < 10000; i++) {
+        for (let j = 0; j < 10000; j++) {
+            if (i === j) {
+                j = i - j + j;
+            }
+        }
+    }
 };
 const noOpponents = (units: Unit[], unit: Unit) => units.filter(u => u.alive && u.type !== unit.type).length === 0;
 const simulate = (ip: string, display: boolean = false, breaker: Breaker = _ => false, power = 3) => {
@@ -124,8 +139,11 @@ const simulate = (ip: string, display: boolean = false, breaker: Breaker = _ => 
         }
         roundCounter = roundCounter + 1;
         if (display) {
-            draw(roundCounter, cave, units);
+            draw(roundCounter, cave, units, power);
         }
+    }
+    if (display) {
+        draw(roundCounter, cave, units, power);
     }
     const [sumOfUnits, winner] = units.filter(u => u.alive).reduce(([s, _], u) => [s + u.hit, u.type], [0, ""] as [number, string]);
     return [roundCounter, sumOfUnits, roundCounter * +sumOfUnits, power, winner];
@@ -144,19 +162,21 @@ const findOptimalPower = (ip: string, display: boolean = false) => {
 
 test("15 - Part 1", () => {
     expect(simulate("15-test1")).toEqual([47, 590, 27730, 3, G]);
-    // expect(simulate("15-test2")).toEqual([37, 982, 36334, 3, E]);
-    // expect(simulate("15-test3")).toEqual([46, 859, 39514, 3, E]);
-    // expect(simulate("15-test4")).toEqual([35, 793, 27755, 3, G]);
-    // expect(simulate("15-test5")).toEqual([54, 536, 28944, 3, G]);
-    // expect(simulate("15-test6")).toEqual([20, 937, 18740, 3, G]);
+    expect(simulate("15-test2")).toEqual([37, 982, 36334, 3, E]);
+    expect(simulate("15-test3")).toEqual([46, 859, 39514, 3, E]);
+    expect(simulate("15-test4")).toEqual([35, 793, 27755, 3, G]);
+    expect(simulate("15-test5")).toEqual([54, 536, 28944, 3, G]);
+    expect(simulate("15-test6")).toEqual([20, 937, 18740, 3, G]);
     expect(simulate("15")).toEqual([77, 2543, 195811, 3, G]);
 });
 
 test("15 - Part 2", () => {
     expect(findOptimalPower("15-test1")).toEqual([4988, 15]);
-    // expect(findOptimalPower("15-test3")).toEqual([31284, 4]);
-    // expect(findOptimalPower("15-test4")).toEqual([3478, 15]);
-    // expect(findOptimalPower("15-test5")).toEqual([6474, 12]);
-    // expect(findOptimalPower("15-test6")).toEqual([1140, 34]);
+    expect(findOptimalPower("15-test3")).toEqual([31284, 4]);
+    expect(findOptimalPower("15-test4")).toEqual([3478, 15]);
+    expect(findOptimalPower("15-test5")).toEqual([6474, 12]);
+    expect(findOptimalPower("15-test6")).toEqual([1140, 34]);
     expect(findOptimalPower("15")).toEqual([69867, 10]);
 });
+
+// console.log(findOptimalPower("15-test7", true));
