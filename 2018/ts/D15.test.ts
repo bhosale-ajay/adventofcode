@@ -12,7 +12,6 @@ interface Unit {
     type: string;
     alive: boolean;
 }
-
 const pathKey = (x: number, y: number) => `${x}_${y}`;
 const parse = (ip: string) => getInput(ip).split("\n")
         .reduce(([cave, units], l, y) => {
@@ -26,6 +25,7 @@ const parse = (ip: string) => getInput(ip).split("\n")
             });
             return [cave, units];
         }, [[], []] as [Cave, Unit[]]) as [Cave, Unit[]];
+const sortOpponents = sort<number[]>(ascendingBy(o => o[1]), ascendingBy(o => o[0]));
 const sortUnits = sort<Unit>(ascendingBy("y"), ascendingBy("x"));
 const getPlacesToMove = (cave: Cave, fx: number, fy: number, visited: Dictionary<boolean>, opponent: string) => {
     const result = [[fx, fy - 1], [fx - 1, fy], [fx + 1, fy], [fx, fy + 1]];
@@ -33,34 +33,56 @@ const getPlacesToMove = (cave: Cave, fx: number, fy: number, visited: Dictionary
                               (cave[y][x] === OPEN || cave[y][x] === opponent));
 };
 const move = (cave: Cave, unit: Unit) => {
-    const queue = [[unit.x, unit.y, unit.x, unit.y]];
+    const queue = [[unit.x, unit.y, unit.x, unit.y, 0]];
     const opponent = unit.type === E ? G : E;
     const visited: Dictionary<boolean> = {[pathKey(unit.x, unit.y)]: true};
     let firstPlace = true;
+    const opponents: number[][] = [];
+    let firstOpponentFoundAt = Number.MAX_SAFE_INTEGER;
+    findOpponents:
     while (true) {
         const current = queue.shift();
         if (current === undefined) {
-            return true;
+            break findOpponents;
+        }
+        if (current[4] >= firstOpponentFoundAt) {
+            break findOpponents;
         }
         for (const [nx, ny] of getPlacesToMove(cave, current[0], current[1], visited, opponent)) {
             if (cave[ny][nx] === opponent) {
-                const toX = current[2];
-                const toY = current[3];
-                if (toX === unit.x && toY === unit.y) {
-                    return true;
+                opponents.push([nx, ny,
+                    current[2],
+                    current[3]
+                ]);
+                if (opponents.length === 1) {
+                    firstOpponentFoundAt = current[4] + 1;
                 }
-                cave[unit.y][unit.x] = ".";
-                cave[toY][toX] = unit.type;
-                unit.x = toX;
-                unit.y = toY;
-                return true;
             }
             visited[pathKey(nx, ny)] = true;
             queue.push([nx, ny,
                 firstPlace ? nx : current[2],
-                firstPlace ? ny : current[3]]);
+                firstPlace ? ny : current[3],
+                current[4] + 1
+            ]);
         }
         firstPlace = false;
+    }
+    if (opponents.length > 0) {
+        if (opponents.length > 1) {
+            // const [px, py] = opponents[0];
+            sortOpponents(opponents);
+            // if (px !== opponents[0][0] && py !== opponents[0][1]) {
+            //    console.log(`${opponents.length} opponents, at ${firstOpponentFoundAt} and picked a new one`);
+            // }
+        }
+        const [ , , toX, toY] = opponents[0];
+        if (toX === unit.x && toY === unit.y) {
+            return;
+        }
+        cave[unit.y][unit.x] = ".";
+        cave[toY][toX] = unit.type;
+        unit.x = toX;
+        unit.y = toY;
     }
 };
 const attack = (cave: Cave, units: Unit[], {x, y, type, power }: Unit) => {
@@ -167,6 +189,7 @@ test("15 - Part 1", () => {
     expect(simulate("15-test4")).toEqual([35, 793, 27755, 3, G]);
     expect(simulate("15-test5")).toEqual([54, 536, 28944, 3, G]);
     expect(simulate("15-test6")).toEqual([20, 937, 18740, 3, G]);
+    expect(simulate("15-test9")).toEqual([102, 2592, 264384, 3, G]);
     expect(simulate("15")).toEqual([77, 2543, 195811, 3, G]);
 });
 
@@ -176,6 +199,7 @@ test("15 - Part 2", () => {
     expect(findOptimalPower("15-test4")).toEqual([3478, 15]);
     expect(findOptimalPower("15-test5")).toEqual([6474, 12]);
     expect(findOptimalPower("15-test6")).toEqual([1140, 34]);
+    expect(findOptimalPower("15-test9")).toEqual([67022, 20]);
     expect(findOptimalPower("15")).toEqual([69867, 10]);
 });
 
