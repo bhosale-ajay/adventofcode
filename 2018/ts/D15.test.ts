@@ -39,31 +39,24 @@ const move = (cave: Cave, unit: Unit) => {
     let firstPlace = true;
     const opponents: number[][] = [];
     let firstOpponentFoundAt = Number.MAX_SAFE_INTEGER;
-    findOpponents:
     while (true) {
         const current = queue.shift();
         if (current === undefined) {
-            break findOpponents;
+            break;
         }
-        if (current[4] >= firstOpponentFoundAt) {
-            break findOpponents;
+        const [x, y, fx, fy, distance] = current;
+        if (distance >= firstOpponentFoundAt) {
+            break;
         }
-        for (const [nx, ny] of getPlacesToMove(cave, current[0], current[1], visited, opponent)) {
+        for (const [nx, ny] of getPlacesToMove(cave, x, y, visited, opponent)) {
             if (cave[ny][nx] === opponent) {
-                opponents.push([nx, ny,
-                    current[2],
-                    current[3]
-                ]);
+                opponents.push([x, y, fx, fy]);
                 if (opponents.length === 1) {
                     firstOpponentFoundAt = current[4] + 1;
                 }
             }
             visited[pathKey(nx, ny)] = true;
-            queue.push([nx, ny,
-                firstPlace ? nx : current[2],
-                firstPlace ? ny : current[3],
-                current[4] + 1
-            ]);
+            queue.push([nx, ny, firstPlace ? nx : fx, firstPlace ? ny : fy, distance + 1]);
         }
         firstPlace = false;
     }
@@ -189,6 +182,7 @@ test("15 - Part 1", () => {
     expect(simulate("15-test4")).toEqual([35, 793, 27755, 3, G]);
     expect(simulate("15-test5")).toEqual([54, 536, 28944, 3, G]);
     expect(simulate("15-test6")).toEqual([20, 937, 18740, 3, G]);
+    expect(simulate("15-test7")).toEqual([ 68, 2812, 191216, 3, G]);
     expect(simulate("15-test9")).toEqual([102, 2592, 264384, 3, G]);
     expect(simulate("15")).toEqual([77, 2543, 195811, 3, G]);
 });
@@ -199,6 +193,7 @@ test("15 - Part 2", () => {
     expect(findOptimalPower("15-test4")).toEqual([3478, 15]);
     expect(findOptimalPower("15-test5")).toEqual([6474, 12]);
     expect(findOptimalPower("15-test6")).toEqual([1140, 34]);
+    expect(findOptimalPower("15-test7")).toEqual([48050, 25]);
     expect(findOptimalPower("15-test9")).toEqual([67022, 20]);
     expect(findOptimalPower("15")).toEqual([69867, 10]);
 });
