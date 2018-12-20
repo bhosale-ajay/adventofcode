@@ -85,9 +85,9 @@ export const print = (fn: string) => {
     let simplified = "";
     let counter = 0;
     for (const [code, a, b, c] of program) {
-        const parts = opcodesC[code](a, b, c).split("=");
+        const parts = opcodesC[code](a, b, c).split(" = ");
         parts[1] = parts[1].replace(/e/g, counter.toString());
-        simplified = simplified + counter.toString().padStart(2, " ") + " " + parts[0] + "=" + parts[1] + "\n";
+        simplified = simplified + counter.toString().padStart(2, " ") + " " + parts[0] + " = " + parts[1] + "\n";
         counter = counter + 1;
     }
     console.log(simplified);
@@ -129,3 +129,29 @@ test("19", () => {
 });
 
 // print("19");
+
+/*
+// Simplified program
+a = 0 // or 1 in case part 2
+
+// Logic for lines 17 to 35
+b = (4 * 19 * 11) + (3 * 22) + 9
+if (a === 1) {
+    b = b + ((27 * 28) + 29) * 30 * 14 * 32
+}
+
+// Logic for line 1 to 15
+c = 1
+while(b >= c) {
+    f = 1
+    while(b >= f){
+        d = c * f
+        if(d === b) {
+            a = c + a
+        }
+        f = f + 1
+    }
+    c = c + 1;
+}
+console.log(a);
+*/
