@@ -81,12 +81,13 @@ export const solve = (fn: string) => {
 };
 
 export const print = (fn: string) => {
-    const [program ] = getProgram(fn);
+    const [program, ipr] = getProgram(fn);
     let simplified = "";
     let counter = 0;
+    const regToReplace = new RegExp(ns[ipr], "g");
     for (const [code, a, b, c] of program) {
         const parts = opcodesC[code](a, b, c).split(" = ");
-        parts[1] = parts[1].replace(/e/g, counter.toString());
+        parts[1] = parts[1].replace(regToReplace, counter.toString());
         simplified = simplified + counter.toString().padStart(2, " ") + " " + parts[0] + " = " + parts[1] + "\n";
         counter = counter + 1;
     }
