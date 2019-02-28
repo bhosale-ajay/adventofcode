@@ -1,5 +1,5 @@
-import { ascendingBy, matchesToArray, query, sort, take } from "dotless";
-import { count, Dictionary, each, getInput } from "./util";
+import { ascendingBy, count, each, matchesToArray, query, sort, take } from "dotless";
+import { Dictionary, getInput } from "./util";
 
 const [COMPLETE, PROCESSING, READY, WAITING] = [0, 1, 2, 3];
 interface Step {

@@ -1,5 +1,5 @@
-import { first, mapWithLast, query } from "dotless";
-import { cycle, getInput, seenBefore } from "./util";
+import { cycle, first, mapWithLast, query } from "dotless";
+import { getInput, seenBefore } from "./util";
 
 const parse = (s: string) => s.split(/,|\n/).map(n => + n);
 const test01 = parse("+1, +1, +1");

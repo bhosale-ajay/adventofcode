@@ -4,12 +4,6 @@ export interface Dictionary<T> {
     [key: string]: T;
 }
 
-export function* cycle<T>(input: Iterable<T>) {
-    while (true) {
-        yield* input;
-    }
-}
-
 export function getInput(day: string) {
     return readFileSync(`../inputs/${day}.txt`, "utf8").replace(/\r/g, "");
 }
@@ -86,25 +80,4 @@ export class LinkedList<T> {
         this.length++;
         return newNode;
     }
-}
-
-export function count<TSource>(predicate: (item: TSource) => boolean = _ => true) {
-    return (source: Iterable<TSource>) => {
-        let countOfItems = 0;
-        for (const item of source) {
-            if (predicate(item)) {
-                countOfItems = countOfItems + 1;
-            }
-        }
-        return countOfItems;
-    };
-}
-
-export function each<TSource>(action: (item: TSource) => void) {
-    return function*(source: Iterable<TSource>) {
-        for (const item of source) {
-            action(item);
-            yield item;
-        }
-    };
 }
