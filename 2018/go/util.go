@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -17,4 +18,12 @@ func fetchInput(day string) string {
 		log.Fatal(err)
 	}
 	return strings.TrimSpace(strings.ReplaceAll(string(content), "\r", ""))
+}
+
+func parseNumber(s string) int {
+	i, err := strconv.Atoi(s)
+	if err == nil {
+		return i
+	}
+	return 0
 }
