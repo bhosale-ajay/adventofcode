@@ -35,7 +35,7 @@ func findOptimalSolution(units string) int {
 func reducePolymer(units string, ignore rune) int {
 	stack := []rune{}
 	for _, u := range units {
-		if ignore > 0 && (u == ignore || u == ignore-32) {
+		if u == ignore || u == ignore-32 {
 			continue
 		}
 		li := len(stack) - 1
@@ -43,12 +43,10 @@ func reducePolymer(units string, ignore rune) int {
 			lu := stack[li]
 			if u == lu+32 || u == lu-32 {
 				stack = stack[:li]
-			} else {
-				stack = append(stack, u)
+				continue
 			}
-		} else {
-			stack = append(stack, u)
 		}
+		stack = append(stack, u)
 	}
 	return len(stack)
 }

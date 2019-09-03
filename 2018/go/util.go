@@ -27,3 +27,20 @@ func parseNumber(s string) int {
 	}
 	return 0
 }
+
+// Point struct
+type Point struct {
+	x, y int
+}
+
+func manhattanDistance(fx int, fy int, tx int, ty int) int {
+	x := fx - tx
+	if x < 0 {
+		x *= -1
+	}
+	y := fy - ty
+	if y < 0 {
+		y *= -1
+	}
+	return x + y
+}

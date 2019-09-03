@@ -25,21 +25,22 @@ const solveChronalCoordinates = (ip: string, distanceCriteria: number) => {
     let reachable = 0;
     for (let lx = minX; lx <= maxX; lx++) {
         for (let ly = minY; ly <= maxY; ly++) {
-            let [totalDistance, claimedDistance, closedTo] = [0, MAX, NONE];
+            let [totalDistance, closestDistance, closeTo] = [0, MAX, NONE];
             for (const {name, x, y} of areas) {
                 const distance = Math.abs(lx - x) + Math.abs(ly - y);
                 totalDistance = totalDistance + distance;
-                if (distance < claimedDistance) {
-                    claimedDistance = distance;
-                    closedTo = name;
-                } else if (distance === claimedDistance) {
-                    closedTo = MANY;
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closeTo = name;
+                } else if (distance === closestDistance) {
+                    closeTo = MANY;
                 }
             }
-            if (closedTo !== MANY) {
-                areas[closedTo].size = areas[closedTo].size + 1;
+            if (closeTo !== MANY) {
+                const closetArea = areas[closeTo];
+                closetArea.size = closetArea.size + 1;
                 const onEdge = (lx === minX) || (ly === minY) || (lx === maxX) || (ly === maxY);
-                areas[closedTo].onEdge = areas[closedTo].onEdge || onEdge;
+                closetArea.onEdge = closetArea.onEdge || onEdge;
             }
             if (totalDistance < distanceCriteria) {
                 reachable = reachable + 1;
