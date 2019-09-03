@@ -117,12 +117,12 @@ func min(a int, b int) int {
 func determineOrder(ip string) (order string) {
 	steps := parseNodes(ip, 0)
 	queue := getSeedQueue(steps)
-	sn := ""
 	for len(queue) > 0 {
 		sort.Strings(queue)
 		// does not work as queue on left side act as new scope
 		// sn, queue := queue[0], queue[1:]
-		sn, queue = queue[0], queue[1:]
+		sn := queue[0]
+		queue = queue[1:]
 		order = order + string(sn)
 		s := steps[sn]
 		for _, cn := range s.children {
