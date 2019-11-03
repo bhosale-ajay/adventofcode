@@ -107,13 +107,6 @@ func findTimeToComplete(ip string, wc int, base int) (ttc int) {
 	return
 }
 
-func min(a int, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func determineOrder(ip string) (order string) {
 	steps := parseNodes(ip, 0)
 	queue := getSeedQueue(steps)
