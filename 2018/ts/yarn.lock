@@ -686,10 +686,10 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
-dotless@^1.0.0-beta.7:
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/dotless/-/dotless-1.0.0-beta.7.tgz#084cdb7fbe34e2b2a49a7a006ca007c0ffeefcce"
-  integrity sha512-mol5bptHarAIWPp+t/KcaUUkRwbhb8BWsdm5DVRKZQ9NzxhAl6EkSANweYasHn5lpDmfFPMxgU3m6pbR/nEqfg==
+dotless@^1.0.0-beta.9:
+  version "1.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/dotless/-/dotless-1.0.0-beta.9.tgz#0f2d95d2cdc82ca0d63df477e757cf19161cdf5f"
+  integrity sha512-07NgJDwV7vA9iMsQq8JfPjKgJQSVO3yBVXe6h7ubXQBDpsvfXmMeuuhvdzqVSPXbX2W6U21t+/brRd5yF9Oz9g==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -3027,9 +3027,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.1.tgz#0b7a04b8cf3868188de914d9568bd030f0c56192"
+typescript@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
+  integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 
 uglify-js@^3.1.4:
   version "3.6.8"
