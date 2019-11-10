@@ -13,14 +13,14 @@ func Test11(t *testing.T) {
 	assert.Equal(t, "235,288,13", findLargestPowerCell(7511, 12, 14), "11 02")
 }
 
-var GRID_SIZE = 300
+const gridSize = 300
 
 func buildGrid(serialNumber int) [][]int {
-	grid := makeIntGrid(GRID_SIZE+1, GRID_SIZE+1, 0)
-	for y := 1; y <= GRID_SIZE; y++ {
-		for x := 1; x <= GRID_SIZE; x++ {
-			rackId := x + 10
-			powerLevel := (((((rackId * y) + serialNumber) * rackId) / 100) % 10) - 5
+	grid := makeIntGrid(gridSize+1, gridSize+1, 0)
+	for y := 1; y <= gridSize; y++ {
+		for x := 1; x <= gridSize; x++ {
+			rackID := x + 10
+			powerLevel := (((((rackID * y) + serialNumber) * rackID) / 100) % 10) - 5
 			grid[y][x] = powerLevel + grid[y][x-1] + grid[y-1][x] - grid[y-1][x-1]
 		}
 	}
@@ -33,8 +33,8 @@ func findLargestPowerCell(serialNumber int, fromSize int, toSize int) string {
 	grid := buildGrid(serialNumber)
 	for sizeCounter := fromSize; sizeCounter <= toSize; sizeCounter++ {
 		sizeFactor := sizeCounter - 1
-		for y := 1; y <= GRID_SIZE-sizeFactor; y++ {
-			for x := 1; x <= GRID_SIZE-sizeFactor; x++ {
+		for y := 1; y <= gridSize-sizeFactor; y++ {
+			for x := 1; x <= gridSize-sizeFactor; x++ {
 				cellPower := grid[y-1][x-1] - grid[y+sizeFactor][x-1] - grid[y-1][x+sizeFactor] + grid[y+sizeFactor][x+sizeFactor]
 				if cellPower > maxPower {
 					maxPower = cellPower

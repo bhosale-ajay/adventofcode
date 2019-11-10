@@ -117,7 +117,7 @@ func runSimulation(ip string) string {
 			}
 			return carts[i].y < carts[j].y
 		})
-		for ci, _ := range carts {
+		for ci := range carts {
 			c := &carts[ci]
 			if c.crashed {
 				continue
@@ -143,7 +143,7 @@ func runSimulation(ip string) string {
 				it = nextTurn[it]
 			}
 			c.move(impacts[c.f][t], it)
-			for oci, _ := range carts {
+			for oci := range carts {
 				oc := &carts[oci]
 				if oc.crashed {
 					continue
