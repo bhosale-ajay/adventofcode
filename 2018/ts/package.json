@@ -20,6 +20,6 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "dotless": "^1.0.0-beta.9"
+    "dotless": "^1.0.0-beta.11"
   }
 }
