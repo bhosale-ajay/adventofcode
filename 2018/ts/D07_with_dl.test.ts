@@ -51,7 +51,7 @@ const findTimeToComplete = (input: string, numberOfWorkers: 2 | 5, base: 0 | 60)
             // Take all steps which are in processing state or ready state
             steps.filter(s => s.status === PROCESSING || s.status === READY),
             // order them to pick steps in processing first and then ready steps based on name
-            sort<Step>(ascendingBy("status"), ascendingBy("name")),
+            sort(ascendingBy("status"), ascendingBy("name")),
             // pick steps for processing based on number of workers
             take(numberOfWorkers),
             // reduce cost, free child nodes

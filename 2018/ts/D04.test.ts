@@ -38,7 +38,7 @@ const findMax = (r: [number[]], f: number) => query(
 );
 const findResponseRecord = (s: string) => query(
     matchesToArray(s, regex, parseLine),
-    sort<LogEntry>(ascendingBy(x => x.timeStamp)),
+    sort(ascendingBy("timeStamp")),
     reduce(prepareLogs, { lastGuard : "", fallAt : 0, logs: ({} as Dictionary<number[]>) }),
     ({ logs }) => Object.keys(logs).map(g => ([+g, logs[g].length, ...sleepSummary(logs[g])])) as [number[]],
     r => [findMax(r, 1), findMax(r, 3)]

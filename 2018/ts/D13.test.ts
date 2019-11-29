@@ -56,7 +56,7 @@ const solve = (ip: string) => {
     // tslint:disable-next-line:prefer-const
     let [ tracks, carts ] = parse(ip);
     let [ firstCrash, firstCrashLocation, lastCartLocation] = [ false, "", "" ];
-    const sorter = sort<Cart>(ascendingBy("y"), ascendingBy("x"));
+    const sorter = sort(ascendingBy("y"), ascendingBy("x"));
     while (carts.length > 1) {
         carts = sorter(carts)
                     .reduce((movedCarts, cart, index) => {

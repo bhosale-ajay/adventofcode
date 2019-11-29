@@ -686,10 +686,10 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
-dotless@^1.0.0-beta.11:
-  version "1.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/dotless/-/dotless-1.0.0-beta.11.tgz#ebe9d74255ed4dab8b6440c7d396eb6ceceb901c"
-  integrity sha512-XwxE9nNVGC07WtT+7/HwihQJ6BpN7NGwTdLrhMjq3dXyWIlmj0hHcmwLodBwQI4P67/4+dGSEVDgv86BoZzXiQ==
+dotless@^1.0.0-beta.12:
+  version "1.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/dotless/-/dotless-1.0.0-beta.12.tgz#de394fcdd217627119e2f770e1e470e63d60c20b"
+  integrity sha512-1Y1mybrrBvDgoclrXBgwvKWULvUYW4JtVA2isuVFiim3QqlpcTQd2oNvhVYQpMn384GDnH3ayjZa+mqynQHpdQ==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
