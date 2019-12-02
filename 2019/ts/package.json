@@ -1,0 +1,29 @@
+{
+  "name": "advent-of-code-2019",
+  "version": "1.0.0",
+  "description": "Advent of code 2019 solutions with typescript",
+  "main": "index.js",
+  "author": "Ajay Bhosale",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --env=node --colors --detectOpenHandles",
+    "ts": "ts-node",
+    "tsc": "tsc",
+    "lint": "eslint *.ts"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.14",
+    "@typescript-eslint/eslint-plugin": "2.9.0",
+    "@typescript-eslint/parser": "2.9.0",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "dotless": "^1.0.0-beta.12"
+  }
+}
