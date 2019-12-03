@@ -6,8 +6,8 @@ import (
 )
 
 func Test02(t *testing.T) {
-	assert.Equal(t, 10566835, tryNounAndVerb(12, 2), "01 01")
-	assert.Equal(t, 2347, findNounAndVerbToLand(), "01 01")
+	assert.Equal(t, 10566835, tryNounAndVerb(12, 2), "02 01")
+	assert.Equal(t, 2347, findNounAndVerbToLand(), "02 02")
 }
 
 func tryNounAndVerb(noun int, verb int) int {
