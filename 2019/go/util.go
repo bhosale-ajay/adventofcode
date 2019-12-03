@@ -20,14 +20,18 @@ func fetchInput(day string) string {
 	return strings.ReplaceAll(string(content), "\r", "")
 }
 
-func fetchNumbers(day string) []int {
-	lines := strings.Split(fetchInput(day), "\n")
+func fetchNumbersWS(day string, sep string) []int {
+	lines := strings.Split(fetchInput(day), sep)
 	result := make([]int, 0, len(lines))
 	for _, l := range lines {
 		i, _ := strconv.Atoi(strings.TrimSpace(l))
 		result = append(result, i)
 	}
 	return result
+}
+
+func fetchNumbers(day string) []int {
+	return fetchNumbersWS(day, "\n")
 }
 
 func parseNumber(s string) int {
