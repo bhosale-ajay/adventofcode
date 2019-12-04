@@ -59,6 +59,16 @@ func manhattanDistance(fx int, fy int, tx int, ty int) int {
 	return x + y
 }
 
+func mdFromCenter(x int, y int) int {
+	if x < 0 {
+		x *= -1
+	}
+	if y < 0 {
+		y *= -1
+	}
+	return x + y
+}
+
 func min(a int, b int) int {
 	if a < b {
 		return a
