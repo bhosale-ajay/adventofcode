@@ -1,4 +1,4 @@
-import { getInput, sumIt } from './util';
+import { getInput } from './util';
 
 const parse = (s: string) => s.split(',').map(n => +n);
 const puzzleInput = getInput('02');

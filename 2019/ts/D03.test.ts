@@ -48,7 +48,7 @@ const findClosestIntersection = (ip: string) => {
   return [md, cs];
 };
 
-test('03, Part 1', () => {
+test('03', () => {
   expect(findClosestIntersection('03a')).toEqual([6, 30]);
   expect(findClosestIntersection('03b')).toEqual([159, 610]);
   expect(findClosestIntersection('03c')).toEqual([135, 410]);
