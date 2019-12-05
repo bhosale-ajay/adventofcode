@@ -16,10 +16,11 @@ const MAX = Number.MAX_SAFE_INTEGER;
 const parseInput = (i: string) => getInput(i).split('\n');
 const parseStep = (l: string) => ({ d: l[0], s: +l.substr(1) } as Step);
 const parseWire = (wd: string) => wd.split(',').map(parseStep);
-const findInterSections = ( 
-    [grid, md, cs]: [Grid, number, number],
-    steps: Step[], 
-    wi: number) => {
+const findInterSections = (
+  [grid, md, cs]: [Grid, number, number],
+  steps: Step[],
+  wi: number
+) => {
   let [step, x, y] = [1, 0, 0];
   for (const { d, s } of steps) {
     const [xd, yd] = directions[d];
@@ -44,7 +45,7 @@ const findInterSections = (
 const findClosestIntersection = (ip: string) => {
   const [_, md, cs] = parseInput(ip)
     .map(parseWire)
-    .reduce(findInterSections, [{}, MAX, MAX] as [Grid, number, number])
+    .reduce(findInterSections, [{}, MAX, MAX] as [Grid, number, number]);
   return [md, cs];
 };
 

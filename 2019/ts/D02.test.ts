@@ -14,7 +14,7 @@ const tryNounAndVerb = (data: string, noun: number, verb: number) => {
     } else if (opCode === 2) {
       p[p[ip + 3]] = p[p[ip + 1]] * p[p[ip + 2]];
     } else if (opCode === 99) {
-        return p[0];
+      return p[0];
     } else {
       return 0;
     }
