@@ -9,7 +9,7 @@
     "test": "jest --env=node --colors --detectOpenHandles",
     "ts": "ts-node",
     "tsc": "tsc",
-    "lint": "eslint *.ts"
+    "lint": "eslint *.ts && prettier -c \"*.ts\""
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
