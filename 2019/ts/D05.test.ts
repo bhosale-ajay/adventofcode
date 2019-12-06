@@ -1,5 +1,4 @@
 import { getInput } from './util';
-import { privateName } from '@babel/types';
 
 const parse = (s: string) => s.split(',').map(w => +w);
 const puzzleInput = getInput('05');
