@@ -102,3 +102,24 @@ export function sumIt(source: Iterable<number>) {
   }
   return result;
 }
+
+export function* combinations(from: number, to: number) {
+  function* settings(ignore: number[] = []) {
+    for (let i = from; i <= to; i++) {
+      if (ignore.findIndex(ti => ti === i) === -1) {
+        yield i;
+      }
+    }
+  }
+  for (const a of settings()) {
+    for (const b of settings([a])) {
+      for (const c of settings([a, b])) {
+        for (const d of settings([a, b, c])) {
+          for (const e of settings([a, b, c, d])) {
+            yield [a, b, c, d, e];
+          }
+        }
+      }
+    }
+  }
+}
