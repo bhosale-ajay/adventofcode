@@ -43,7 +43,7 @@ const findSanta = (input: string) => {
   const visited = new Set<string>([YOU]);
   const queue = [[YOU, -1]];
   while (queue.length > 0) {
-    const [n, hops] = queue.pop() as [string, number];
+    const [n, hops] = queue.shift() as [string, number];
     const cons = space[n][2];
     for (const con of cons.filter(c => !visited.has(c))) {
       if (con === SAN) {
@@ -63,5 +63,7 @@ test('06 Part 1', () => {
 
 test('06 Part 2', () => {
   expect(findSanta('06b')).toEqual(4);
+  expect(findSanta('06c')).toEqual(3);
+  expect(findSanta('06d')).toEqual(0);
   expect(findSanta('06')).toEqual(307);
 });

@@ -75,5 +75,6 @@ func Test06(t *testing.T) {
 	assert.Equal(t, 204521, countDirectNIndirectOrbits("06"), "06 1")
 	assert.Equal(t, 4, findSanta("06b"), "06 2 Test 1")
 	assert.Equal(t, 3, findSanta("06c"), "06 2 Test 2")
+	assert.Equal(t, 0, findSanta("06d"), "06 2 Test 3")
 	assert.Equal(t, 307, findSanta("06"), "06 2")
 }
