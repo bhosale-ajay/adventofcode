@@ -5,7 +5,6 @@ const parse = (s: string) => s.split(',').map(w => +w);
 const findDiagnosticCode = (inputs: number[], program: string) => {
   const p = parse(program);
   let diagnosticCode = 0;
-  let inputIndex = 0;
   for (let ip = 0; ip < p.length; ) {
     const [i, p1, p2, l] = p.slice(ip, ip + 4);
     // prettier-ignore
@@ -22,9 +21,8 @@ const findDiagnosticCode = (inputs: number[], program: string) => {
       p[l] = a * b;
       ip = ip + 4;
     } else if (opCode === 3) {
-      p[p1] = inputs[inputIndex];
+      p[p1] = inputs.shift() as number;
       ip = ip + 2;
-      inputIndex = inputIndex + 1;
     } else if (opCode === 4) {
       diagnosticCode = a;
       ip = ip + 2;
@@ -50,7 +48,7 @@ const findDiagnosticCode = (inputs: number[], program: string) => {
 const findHighestSignal = (ip: string) => {
   const program = getInput(ip);
   let max = 0;
-  for (const [a, b, c, d, e] of combinations(0, 4)){
+  for (const [a, b, c, d, e] of combinations(0, 4)) {
     const oa = findDiagnosticCode([a, 0], program);
     const ob = findDiagnosticCode([b, oa], program);
     const oc = findDiagnosticCode([c, ob], program);
