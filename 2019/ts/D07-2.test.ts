@@ -4,6 +4,9 @@ const parse = (s: string) => s.split(',').map(w => +w);
 
 function* findDiagnosticCode(phaseSettings: number[], program: string) {
   const p = parse(program);
+  // start reading
+  const firstMessage = yield false;
+  phaseSettings.push(firstMessage);
   for (let ip = 0; ip < p.length; ) {
     const [i, p1, p2, l] = p.slice(ip, ip + 4);
     // prettier-ignore
@@ -57,15 +60,9 @@ const findHighestSignal = (ip: string) => {
   let max = 0;
   const prevIndex = [4, 0, 1, 2, 3];
   const nextIndex = [1, 2, 3, 4, 0];
-  for (const [a, b, c, d, e] of combinations(5, 9)) {
+  for (const ps of combinations(5, 9)) {
     const outputs = [0, 0, 0, 0, 0];
-    const amplifiers = [
-      findDiagnosticCode([a, 0], program),
-      findDiagnosticCode([b], program),
-      findDiagnosticCode([c], program),
-      findDiagnosticCode([d], program),
-      findDiagnosticCode([e], program)
-    ];
+    const amplifiers = ps.map(p => findDiagnosticCode([p], program));
     let ai = 0;
     // eslint-disable-next-line no-constant-condition
     while (true) {
