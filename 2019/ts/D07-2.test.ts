@@ -2,11 +2,16 @@ import { combinations, getInput } from './util';
 
 const parse = (s: string) => s.split(',').map(w => +w);
 
-function* findDiagnosticCode(phaseSettings: number[], program: string) {
+function* findDiagnosticCode(
+  phaseSettings: number[],
+  program: string
+): Generator<number[] | false, void, number[]> {
   const p = parse(program);
   // start reading
-  const firstMessage = yield false;
-  phaseSettings.push(firstMessage);
+  const [fm, fmId] = yield false;
+  let messageId = 100;
+  const seen = new Set<number>([fmId]);
+  phaseSettings.push(fm);
   for (let ip = 0; ip < p.length; ) {
     const [i, p1, p2, l] = p.slice(ip, ip + 4);
     // prettier-ignore
@@ -28,13 +33,20 @@ function* findDiagnosticCode(phaseSettings: number[], program: string) {
         value = phaseSettings.shift() as number;
       } else {
         // send read signal
-        value = yield false;
+        const [m, mid] = yield false;
+        value = m;
+        seen.add(mid);
       }
       p[p1] = value;
       ip = ip + 2;
     } else if (opCode === 4) {
       // send write signal
-      yield a;
+      messageId = messageId + 1;
+      const [m, mid] = yield [a, messageId];
+      if (!seen.has(mid)) {
+        phaseSettings.push(m);
+        seen.add(mid);
+      }
       ip = ip + 2;
     } else if (opCode === 5) {
       ip = a !== 0 ? b : ip + 3;
@@ -61,7 +73,8 @@ const findHighestSignal = (ip: string) => {
   const prevIndex = [4, 0, 1, 2, 3];
   const nextIndex = [1, 2, 3, 4, 0];
   for (const ps of combinations(5, 9)) {
-    const outputs = [0, 0, 0, 0, 0];
+    // prettier-ignore
+    const outputs = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
     const amplifiers = ps.map(p => findDiagnosticCode([p], program));
     let ai = 0;
     // eslint-disable-next-line no-constant-condition
@@ -75,11 +88,11 @@ const findHighestSignal = (ip: string) => {
       }
       const readSignal = value === false;
       if (!done && !readSignal) {
-        outputs[ai] = value as number;
+        outputs[ai] = value as number[];
       }
       ai = (readSignal ? prevIndex : nextIndex)[ai];
     }
-    max = Math.max(max, outputs[4]);
+    max = Math.max(max, outputs[4][0]);
   }
   return max;
 };
