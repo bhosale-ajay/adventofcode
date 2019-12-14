@@ -3,7 +3,7 @@ import { IntCodeComputer, SignalType } from './intcode';
 
 const puzzleInput = getInput('13');
 const playGame = (): [number, number] => {
-  const computer = IntCodeComputer(puzzleInput, { overRideZeroLocation: 2 });
+  const computer = IntCodeComputer(puzzleInput, { overrideZeroLocation: 2 });
   let [blockTiles, score, nextInput, paddle] = [0, 0, 0, 0];
   let outputs: number[] = [];
   // eslint-disable-next-line no-constant-condition

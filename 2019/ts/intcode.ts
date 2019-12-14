@@ -27,16 +27,16 @@ export class CompleteSignal {
 export type Message = InputSignal | OutputSignal | ReadySignal | CompleteSignal;
 
 type Options = {
-  overRideZeroLocation?: number;
+  overrideZeroLocation?: number;
 };
 
 export function* IntCodeComputer(
   program: string,
-  { overRideZeroLocation }: Options = {}
+  { overrideZeroLocation }: Options = {}
 ): Generator<Message, Message, number> {
   const p = parse(program);
-  if (overRideZeroLocation !== undefined) {
-    p[0] = overRideZeroLocation;
+  if (overrideZeroLocation !== undefined) {
+    p[0] = overrideZeroLocation;
   }
   yield new ReadySignal();
   let rb = 0;
