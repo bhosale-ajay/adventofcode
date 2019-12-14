@@ -80,6 +80,9 @@ const findMaxFuel = (ip: string) => {
   let lowerBound = upperBound / 10;
   while (lowerBound !== upperBound) {
     const guess = lowerBound + Math.floor((upperBound - lowerBound) / 2);
+    if (guess === lowerBound) {
+      break;
+    }
     if (findRequirement(es, order, guess) <= trillion) {
       lowerBound = guess;
     } else {
@@ -99,6 +102,7 @@ test('14 Part 1', () => {
 });
 
 test('14 Part 2', () => {
+  expect(findMaxFuel('14c')).toEqual(82892753);
   expect(findMaxFuel('14d')).toEqual(5586022);
   expect(findMaxFuel('14e')).toEqual(460664);
   expect(findMaxFuel('14')).toEqual(1896688);
