@@ -13,7 +13,7 @@ const RETURN = [0, S, N, E, W];
 const spreadOxygen = (): [number, number] => {
   const computer = IntCodeComputer(puzzleInput);
   const section = {} as Dictionary<string>;
-  let [x, y, steps, mins, command] = [0, 0, 0, 0, 0, 0, N];
+  let [x, y, steps, mins, command] = [0, 0, 0, 0, N];
   const isUnknown = ([xi, yi]: number[]) => {
     return section[getKey(x + xi, y + yi)] === UNKNOWN;
   };
