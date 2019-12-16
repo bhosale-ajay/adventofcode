@@ -29,7 +29,7 @@ const findEightDigitMessage = (ip: string) => {
       signal.push(signal[n]);
     }
   }
-  let offset = +ip.slice(0, 7);
+  const offset = +ip.slice(0, 7);
   signal = signal.slice(offset);
   // based on answer from folke
   for (let phase = 1; phase <= 100; phase++) {
@@ -41,10 +41,10 @@ const findEightDigitMessage = (ip: string) => {
 };
 
 const check = (a: string, e: string) => {
-    if(a !== e) {
-        throw `Expected ${e} : Actual ${e}`;
-    }
-}
+  if (a !== e) {
+    throw `Expected ${e} : Actual ${e}`;
+  }
+};
 
 const t1 = '80871224585914546619083218645595';
 const t2 = '19617804207202209144916044189917';
@@ -52,11 +52,11 @@ const t3 = '69317163492948606335995924319873';
 const t4 = '03036732577212944063491565474664';
 const t5 = '02935109699940807407585447034323';
 const t6 = '03081770884921959731165446850517';
-check(findFirstEightDigits(t1),'24176176');
-check(findFirstEightDigits(t2),'73745418');
-check(findFirstEightDigits(t3),'52432133');
-check(findFirstEightDigits(puzzleInput),'28430146');
-check(findEightDigitMessage(t4),'84462026');
-check(findEightDigitMessage(t5),'78725270');
-check(findEightDigitMessage(t6),'53553731');
+check(findFirstEightDigits(t1), '24176176');
+check(findFirstEightDigits(t2), '73745418');
+check(findFirstEightDigits(t3), '52432133');
+check(findFirstEightDigits(puzzleInput), '28430146');
+check(findEightDigitMessage(t4), '84462026');
+check(findEightDigitMessage(t5), '78725270');
+check(findEightDigitMessage(t6), '53553731');
 check(findEightDigitMessage(puzzleInput), '12064286');
