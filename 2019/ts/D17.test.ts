@@ -96,14 +96,13 @@ const convertToInput = (p: string): number[] => {
 
 const prepareInputForRobot = (view: View, x: number, y: number): number[] => {
   let [rl, xi, yi] = startingDirection(view, x, y);
-  // let steps = [] as string[];
   let path = '';
   while (rl !== 0) {
-    let step = 0;
+    let steps = 0;
     while (isScaffold(view, x + xi, y + yi)) {
-      [x, y, step] = [x + xi, y + yi, step + 1];
+      [x, y, steps] = [x + xi, y + yi, steps + 1];
     }
-    path = path + char(rl) + ',' + step + SPACE;
+    path = path + char(rl) + ',' + steps + SPACE;
     rl = 0;
     if (xi === 0) {
       if (isScaffold(view, x - 1, y)) {
