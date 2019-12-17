@@ -76,7 +76,7 @@ const extractPattern = (path: string, func: string): [string, string] => {
     throw `Invalid path`;
   }
   let patternToTry = steps[index];
-  while (patternToTry.trim().length <= 20 && path.indexOf(patternToTry) > -1) {
+  while (patternToTry.trim().length <= 20 && path.split(patternToTry).length > 2) {
     pattern = patternToTry;
     index = index + 1;
     if (index === steps.length || steps[index].startsWith('-')) {
