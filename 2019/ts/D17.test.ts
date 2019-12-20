@@ -2,7 +2,6 @@ import { getInput } from './util';
 import { IntCodeComputer, SignalType } from './intcode';
 
 type View = number[][];
-const puzzleInput = getInput('17');
 const char = (cc: number) => String.fromCharCode(cc);
 const cc = (s: string | number) => s.toString().charCodeAt(0);
 const SCAFFOLD = cc('#');
@@ -15,8 +14,8 @@ const isScaffold = (view: View, x: number, y: number) => {
   return 0 <= y && y < view.length && view[y][x] === SCAFFOLD;
 };
 
-const processCameraMode = (): [View, number, number, number] => {
-  const computer = IntCodeComputer(puzzleInput);
+const processCameraMode = (ip: string): [View, number, number, number] => {
+  const computer = IntCodeComputer(ip);
   const view = [] as View;
   // prettier-ignore
   const robotIndicators = [UP_CC, DO_CC, LE_CC, RI_CC];
@@ -66,8 +65,11 @@ const startingDirection = (view: View, x: number, y: number): number[] => {
   }
   throw 'Invalid location of Robot.';
 };
-
-const extractPattern = (path: string, func: string): [string, string] => {
+const extractPattern = (
+  path: string,
+  func: string,
+  limit: number
+): [string, string] => {
   const steps = path.split(SPACE);
   let pattern = '';
   let index = steps.findIndex(s => !s.startsWith('-'));
@@ -76,15 +78,18 @@ const extractPattern = (path: string, func: string): [string, string] => {
     throw `Invalid path`;
   }
   let patternToTry = steps[index];
+  let patternLength = 1;
   while (
-    patternToTry.trim().length <= 20 &&
-    path.split(patternToTry).length > 2
+    patternToTry.length <= 20 &&
+    path.split(patternToTry).length > 2 &&
+    patternLength < limit
   ) {
     pattern = patternToTry;
     index = index + 1;
     if (index === steps.length || steps[index].startsWith('-')) {
       break;
     }
+    patternLength = patternLength + 1;
     patternToTry = patternToTry + SPACE + steps[index];
   }
   return [path.replace(new RegExp(pattern, 'g'), `-${func}-`).trim(), pattern];
@@ -95,6 +100,29 @@ const convertToInput = (p: string): number[] => {
     .replace(regExpForSpace, ',')
     .split('')
     .map(s => s.charCodeAt(0));
+};
+
+const tryExtractPattern = (path: string): number[] => {
+  for (let cl = 7; cl >= 3; cl--) {
+    for (let bl = 7; bl >= 3; bl--) {
+      for (let al = 7; al >= 3; al--) {
+        const [pathRA, a] = extractPattern(path.trim(), 'A', al);
+        const [pathRB, b] = extractPattern(pathRA, 'B', bl);
+        const [pathRC, c] = extractPattern(pathRB, 'C', cl);
+        if (pathRC.indexOf('R') === -1 || pathRC.indexOf('L') === -1) {
+          return [
+            ...convertToInput(pathRC.replace(/-/g, '')),
+            ...convertToInput(a),
+            ...convertToInput(b),
+            ...convertToInput(c),
+            N_CC, // Say NO
+            NL_CC // Last New Line
+          ];
+        }
+      }
+    }
+  }
+  throw `No patterns to found.`;
 };
 
 const prepareInputForRobot = (view: View, x: number, y: number): number[] => {
@@ -121,24 +149,16 @@ const prepareInputForRobot = (view: View, x: number, y: number): number[] => {
       }
     }
   }
-  const [pathRA, a] = extractPattern(path.trim(), 'A');
-  const [pathRB, b] = extractPattern(pathRA, 'B');
-  const [pathRC, c] = extractPattern(pathRB, 'C');
-  if (pathRC.indexOf('R') > -1 || pathRC.indexOf('L') > -1) {
-    throw 'Not able to extract all patterns, logic not sufficient.';
-  }
-  return [
-    ...convertToInput(pathRC.replace(/-/g, '').replace(regExpForSpace, ',')),
-    ...convertToInput(a),
-    ...convertToInput(b),
-    ...convertToInput(c),
-    N_CC, // Say NO
-    NL_CC // Last New Line
-  ];
+  return tryExtractPattern(path);
 };
 
-const processCleanMode = (view: View, rx: number, ry: number): number => {
-  const computer = IntCodeComputer(puzzleInput, { overrideZeroLocation: 2 });
+const processCleanMode = (
+  ip: string,
+  view: View,
+  rx: number,
+  ry: number
+): number => {
+  const computer = IntCodeComputer(ip, { overrideZeroLocation: 2 });
   const input = prepareInputForRobot(view, rx, ry);
   let [nextInput, dustCollected] = [0, 0];
   // eslint-disable-next-line no-constant-condition
@@ -155,8 +175,14 @@ const processCleanMode = (view: View, rx: number, ry: number): number => {
   return dustCollected;
 };
 
+const solve = (ip: string) => {
+  const [view, sum, rx, ry] = processCameraMode(ip);
+  const dustCollected = processCleanMode(ip, view, rx, ry);
+  return [sum, dustCollected];
+};
+
 test('17', () => {
-  const [view, sum, rx, ry] = processCameraMode();
-  expect(sum).toEqual(4112);
-  expect(processCleanMode(view, rx, ry)).toEqual(578918);
+  expect(solve(getInput('17a'))).toEqual([5056, 942367]);
+  expect(solve(getInput('17b'))).toEqual([8928, 880360]);
+  expect(solve(getInput('17'))).toEqual([4112, 578918]);
 });
