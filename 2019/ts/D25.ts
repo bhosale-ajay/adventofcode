@@ -30,9 +30,10 @@ const findSanta = () => {
       EAST
     ].join(NL) + NL
   );
-  inputs.unshift(0);   // first dummy input
+  inputs.unshift(0); // first dummy input
   let index = 0;
   let output = '';
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const signal = computer.next(inputs[index]).value;
     if (signal.type === SignalType.OUTPUT) {
