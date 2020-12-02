@@ -1,0 +1,28 @@
+{
+    "name": "advent-of-code-2020",
+    "version": "1.0.0",
+    "description": "Advent of code 2020 solutions with typescript",
+    "main": "index.js",
+    "author": "Ajay Bhosale",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest --env=node --colors --detectOpenHandles",
+        "ts": "ts-node",
+        "lint": "prettier --write **/**.ts & eslint *.ts"
+    },
+    "devDependencies": {
+        "@types/jest": "^26.0.15",
+        "@types/node": "^14.14.10",
+        "@typescript-eslint/eslint-plugin": "^4.9.0",
+        "@typescript-eslint/parser": "^4.9.0",
+        "eslint": "^7.14.0",
+        "eslint-config-prettier": "^6.15.0",
+        "jest": "^26.6.3",
+        "ts-jest": "^26.4.4",
+        "ts-node": "^9.0.0",
+        "typescript": "^4.1.2"
+    },
+    "dependencies": {
+        "dotless": "^1.2.0"
+    }
+}
