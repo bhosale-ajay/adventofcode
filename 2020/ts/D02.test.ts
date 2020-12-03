@@ -1,4 +1,4 @@
-import { matchesToArray } from 'dotless';
+import { count, matchesToArray } from 'dotless';
 import { getInput } from './util';
 
 type Line = [min: number, max: number, char: string, password: string];
@@ -12,12 +12,12 @@ const isValid = ([min, max, char, password]: Line) => {
     return min <= count && count <= max;
 };
 const isValidCorrectPolicy = ([min, max, char, password]: Line) => {
-    const ci = password[min - 1];
-    const cm = password[max - 1];
-    return (ci === char && cm !== char) || (ci !== char && cm == char);
+    const cmi = password[min - 1];
+    const cmx = password[max - 1];
+    return (cmi === char && cmx !== char) || (cmi !== char && cmx == char);
 };
 const countValidPasswords = (ip: Line[], checker: (l: Line) => boolean) => {
-    return ip.filter(checker).length;
+    return count(checker)(ip);
 };
 
 test('02, Part 1', () => {
