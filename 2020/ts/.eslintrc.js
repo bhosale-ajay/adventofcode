@@ -15,6 +15,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': [
             'error',
             { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }
-        ]
+        ],
+        'arrow-parens': [2, "as-needed", { "requireForBlockBody": true }]
     }
 };
