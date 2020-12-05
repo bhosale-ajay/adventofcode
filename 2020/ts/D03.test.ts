@@ -1,8 +1,7 @@
-import { getInput } from './util';
+import { getLines } from './util';
 
-const parse = (ip: string) => getInput(ip).split('\n');
-const testInput = parse('03-test');
-const input = parse('03');
+const testInput = getLines('03-test');
+const input = getLines('03');
 const TREE = '#';
 const slopes = [
     [1, 1],

@@ -1,13 +1,8 @@
 import { ascendingBy, first, query } from 'dotless';
-import { assertNotNull, getInput } from './util';
+import { assertNotNull, mapLineToNumber } from './util';
 
-const parse = (ip: string) =>
-    getInput(ip)
-        .split('\n')
-        .map(n => +n);
-
-const testInput = parse('01-test');
-const puzzleInput = parse('01');
+const testInput = mapLineToNumber('01-test');
+const puzzleInput = mapLineToNumber('01');
 
 const hasMatch = () => {
     const candidates = new Set<number>();

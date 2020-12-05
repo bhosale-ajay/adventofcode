@@ -16,9 +16,8 @@ const isValidCorrectPolicy = ([min, max, char, password]: Line) => {
     const cmx = password[max - 1];
     return (cmi === char && cmx !== char) || (cmi !== char && cmx == char);
 };
-const countValidPasswords = (ip: Line[], checker: (l: Line) => boolean) => {
-    return count(checker)(ip);
-};
+const countValidPasswords = (ip: Line[], validator: (l: Line) => boolean) =>
+    count(validator)(ip);
 
 test('02, Part 1', () => {
     expect(countValidPasswords(testInput, isValid)).toEqual(2);

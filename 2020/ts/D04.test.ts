@@ -1,22 +1,18 @@
-import { getInput } from './util';
+import { mapLine } from './util';
 import { count, matchesToArray } from 'dotless';
 type Passport = Map<string, string>;
+type validator = (d: string) => boolean;
 const regex = /((ecl)|(byr)|(iyr)|(pid)|(cid)|(hgt)|(eyr)|(hcl)):(#*\w+)/g;
-const parsePassport = (m: RegExpExecArray) => [m[1], m[10]] as [string, string];
-const parse = (ip: string) =>
-    getInput(ip)
-        .split('\n\n')
-        .map(p => matchesToArray(p, regex, parsePassport))
-        .map(f => new Map(f) as Passport);
-type checker = (d: string) => boolean;
+const heightDataExpression = /^(\d+)(cm|in)$/;
+const parseFields = (m: RegExpExecArray) => [m[1], m[10]] as [string, string];
+const lineToPassport = (l: string) =>
+    new Map(matchesToArray(l, regex, parseFields)) as Passport;
+const parse = (ip: string) => mapLine(ip, lineToPassport, '\n\n');
 const checkYearRange = (min: number, max: number) => (y: string) =>
     min <= +y && +y <= max;
-const heightDataExpression = /^(\d+)(cm|in)$/;
 const checkHeight = (height: string) => {
     const matches = heightDataExpression.exec(height);
-    if (matches === null) {
-        return false;
-    }
+    if (matches === null) return false;
     const [, value, unit] = matches;
     return unit === 'in'
         ? 59 <= +value && +value <= 76
@@ -24,7 +20,7 @@ const checkHeight = (height: string) => {
 };
 const checkPattern = (p: RegExp) => (v: string) => p.test(v);
 
-const validators: [field: string, checker: checker][] = [
+const validators: [field: string, validator: validator][] = [
     ['byr', checkYearRange(1920, 2002)],
     ['iyr', checkYearRange(2010, 2020)],
     ['eyr', checkYearRange(2020, 2030)],
@@ -39,8 +35,8 @@ const hasValidFields = (passport: Passport) =>
 
 const hasValidData = (passport: Passport) =>
     hasValidFields(passport) &&
-    validators.every(([field, checker]) =>
-        checker(passport.get(field) as string)
+    validators.every(([field, validator]) =>
+        validator(passport.get(field) as string)
     );
 
 const testInput01 = parse('04-test-01');
