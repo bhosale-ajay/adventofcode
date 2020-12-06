@@ -3,13 +3,19 @@ import { mapLine } from './util';
 
 const expression = /F|B|L|R/g;
 const binaryMap = { F: 0, B: 1, L: 0, R: 1 };
+const toBinary = (l: string) =>
+    l.replace(expression, c => (binaryMap as any)[c]);
 
+/*
 const parseBoardingPass = (line: string): number => {
     const binary = line.replace(expression, c => (binaryMap as any)[c]);
     const row = parseInt(binary.substr(0, 7), 2);
     const col = parseInt(binary.substr(7), 2);
-    return row * 8 + col;
+    return binary.substr(0, 7), 2 * 8 + col];
 };
+*/
+
+const parseBoardingPass = (l: string) => parseInt(toBinary(l), 2);
 
 const findSeat = (): [maxSeat: number, missingSeat: number] => {
     const seats = mapLine('05', parseBoardingPass);
