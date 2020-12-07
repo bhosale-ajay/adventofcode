@@ -23,26 +23,21 @@ const getBag = (bags: Bags, name: string) => {
     return bag;
 };
 
-const addBag = getBag;
-
 const build = (
-    [lastBagName, bags]: [string, Bags],
+    [parentBagName, bags]: [string, Bags],
     token: string
 ): [string, Bags] => {
-    let parentBagName = lastBagName;
     if (token.endsWith('bags contain')) {
         const name = token.substr(0, token.length - 13);
-        addBag(bags, name);
-        parentBagName = name;
-    } else {
-        const parentBag = getBag(bags, parentBagName);
-        const firstSpaceIndex = token.indexOf(' ');
-        const quantity = +token.substr(0, firstSpaceIndex);
-        const name = token.substr(firstSpaceIndex + 1);
-        const bag = getBag(bags, name);
-        parentBag.contains.push([name, quantity]);
-        bag.parent.push(parentBagName);
+        return [name, bags];
     }
+    const parentBag = getBag(bags, parentBagName);
+    const firstSpaceIndex = token.indexOf(' ');
+    const quantity = +token.substr(0, firstSpaceIndex);
+    const name = token.substr(firstSpaceIndex + 1);
+    const bag = getBag(bags, name);
+    parentBag.contains.push([name, quantity]);
+    bag.parent.push(parentBagName);
     return [parentBagName, bags];
 };
 
