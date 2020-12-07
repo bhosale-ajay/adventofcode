@@ -2,7 +2,7 @@ import { matchesToArray } from 'dotless';
 import { getInput } from './util';
 
 interface Bag {
-    contains: Map<string, number>;
+    contains: [string, number][];
     parent: string[];
     count: number;
 }
@@ -14,7 +14,7 @@ const getBag = (bags: Bags, name: string) => {
     let bag = bags.get(name);
     if (bag === undefined) {
         bag = {
-            contains: new Map(),
+            contains: [],
             parent: [],
             count: -1,
         };
@@ -40,7 +40,7 @@ const build = (
         const quantity = +token.substr(0, firstSpaceIndex);
         const name = token.substr(firstSpaceIndex + 1);
         const bag = getBag(bags, name);
-        parentBag.contains.set(name, quantity);
+        parentBag.contains.push([name, quantity]);
         bag.parent.push(parentBagName);
     }
     return [parentBagName, bags];
@@ -73,7 +73,7 @@ const getCount = (bags: Bags, name: string) => {
         return bag.count;
     }
     let count = 1; // count self
-    bag.contains.forEach((cq, cn) => {
+    bag.contains.forEach(([cn, cq]) => {
         count = count + cq * getCount(bags, cn);
     });
     bag.count = count;
