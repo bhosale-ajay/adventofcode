@@ -1,9 +1,6 @@
 import { ascendingBy, first, query } from 'dotless';
 import { assertNotNull, mapLineToNumber } from './util';
 
-const testInput = mapLineToNumber('01-test');
-const puzzleInput = mapLineToNumber('01');
-
 const hasMatch = () => {
     const candidates = new Set<number>();
     return (candidate: number) => {
@@ -41,12 +38,11 @@ const findProductOfTriplets = (candidates: number[]) => {
     return -1;
 };
 
-test('01, Part 1', () => {
+test('01', () => {
+    const testInput = mapLineToNumber('01-test');
+    const puzzleInput = mapLineToNumber('01');
     expect(findProductOfMatch(testInput)).toEqual(514579);
     expect(findProductOfMatch(puzzleInput)).toEqual(788739);
-});
-
-test('01, Part 2', () => {
     expect(findProductOfTriplets(testInput)).toEqual(241861950);
     expect(findProductOfTriplets(puzzleInput)).toEqual(178724430);
 });

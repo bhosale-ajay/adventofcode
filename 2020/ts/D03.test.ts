@@ -1,7 +1,5 @@
 import { getLines } from './util';
 
-const testInput = getLines('03-test');
-const input = getLines('03');
 const TREE = '#';
 const slopes = [
     [1, 1],
@@ -30,12 +28,11 @@ const productOfSlopes = (input: string[]) =>
         1
     );
 
-test('03, Part 1', () => {
+test('03', () => {
+    const testInput = getLines('03-test');
+    const input = getLines('03');
     expect(countTrees(testInput)).toEqual(7);
     expect(countTrees(input)).toEqual(173);
-});
-
-test('03, Part 2', () => {
     expect(productOfSlopes(testInput)).toEqual(336);
     expect(productOfSlopes(input)).toEqual(4385176320);
 });

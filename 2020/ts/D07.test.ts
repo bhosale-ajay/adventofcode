@@ -75,16 +75,12 @@ const getCount = (bags: Bags, name: string) => {
 // -1 as the getCount considers parent + children
 const findRequiredBags = (bags: Bags) => getCount(bags, SHINY_GOLD) - 1;
 
-const testInput01 = parse('07-test-01');
-const testInput02 = parse('07-test-02');
-const input = parse('07');
-
-test('07, Part 1', () => {
+test('07', () => {
+    const testInput01 = parse('07-test-01');
+    const testInput02 = parse('07-test-02');
+    const input = parse('07');
     expect(getParentCount(testInput01)).toEqual(4);
     expect(getParentCount(input)).toEqual(172);
-});
-
-test('07, Part 2', () => {
     expect(findRequiredBags(testInput01)).toEqual(32);
     expect(findRequiredBags(testInput02)).toEqual(126);
     expect(findRequiredBags(input)).toEqual(39645);

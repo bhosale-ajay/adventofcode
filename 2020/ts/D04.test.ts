@@ -39,20 +39,17 @@ const hasValidData = (passport: Passport) =>
         validator(passport.get(field) as string)
     );
 
-const testInput01 = parse('04-test-01');
-const testInput02 = parse('04-test-02');
-const testInput03 = parse('04-test-03');
-const input = parse('04');
+test('04', () => {
+    const testInput01 = parse('04-test-01');
+    const testInput02 = parse('04-test-02');
+    const testInput03 = parse('04-test-03');
+    const input = parse('04');
 
-const validFieldsCounter = count(hasValidFields);
-const validDataCounter = count(hasValidData);
+    const validFieldsCounter = count(hasValidFields);
+    const validDataCounter = count(hasValidData);
 
-test('04, Part 1', () => {
     expect(validFieldsCounter(testInput01)).toEqual(2);
     expect(validFieldsCounter(input)).toEqual(237);
-});
-
-test('04, Part 2', () => {
     expect(validDataCounter(testInput02)).toEqual(0);
     expect(validDataCounter(testInput03)).toEqual(4);
     expect(validDataCounter(input)).toEqual(172);
