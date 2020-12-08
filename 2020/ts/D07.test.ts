@@ -7,7 +7,7 @@ interface Bag {
     count: number;
 }
 type Bags = Map<string, Bag>;
-const regex = /([\w]+\s[\w]+ bags contain)|([\d+] [\w]+\s[\w]+)/g;
+const regex = /(([\w]+\s[\w]+) bags contain)|(([\d+]) ([\w]+\s[\w]+))/g;
 const SHINY_GOLD = 'shiny gold';
 
 const getBag = (bags: Bags, name: string) => {
@@ -25,27 +25,24 @@ const getBag = (bags: Bags, name: string) => {
 
 const build = (
     [parentBagName, bags]: [string, Bags],
-    token: string
+    token: RegExpExecArray
 ): [string, Bags] => {
-    if (token.endsWith('bags contain')) {
-        const name = token.substr(0, token.length - 13);
+    if (token[2] !== undefined) {
+        const name = token[2];
         return [name, bags];
     }
     const parentBag = getBag(bags, parentBagName);
-    const firstSpaceIndex = token.indexOf(' ');
-    const quantity = +token.substr(0, firstSpaceIndex);
-    const name = token.substr(firstSpaceIndex + 1);
+    const quantity = +token[4];
+    const name = token[5];
     const bag = getBag(bags, name);
     parentBag.contains.push([name, quantity]);
     bag.parent.push(parentBagName);
     return [parentBagName, bags];
 };
 
+const seed = () => ['', new Map<string, Bag>()] as [string, Bags];
 const parse = (ip: string) =>
-    matchesToArray(getInput(ip), regex, x => x[0]).reduce(build, [
-        '',
-        new Map<string, Bag>(),
-    ] as [string, Bags])[1];
+    matchesToArray(getInput(ip), regex).reduce(build, seed())[1];
 
 const getParentCount = (bags: Bags) => {
     const goldBag = getBag(bags, SHINY_GOLD);
