@@ -7,12 +7,12 @@ const L = 'L';
 const R = 'R';
 type Direction = 'N' | 'S' | 'E' | 'W';
 type Turn = 'L' | 'R';
-type Action = Direction | Turn | 'F';
-type Navigation = [action: Action, value: number];
+type ActionType = Direction | Turn | 'F';
+type Navigation = [action: ActionType, value: number];
 type Ship = [x: number, y: number, facing: Direction];
 type Snwp = [x: number, y: number, wx: number, wy: number];
-type StateChange<T> = (s: T, v: number) => T;
-type StateChangeMap<T> = Record<Action, StateChange<T>>;
+type Action<T> = (s: T, v: number) => T;
+type ActionMap<T> = Record<ActionType, Action<T>>;
 const takeTurn = (current: Direction, value: number, turn: Turn): Direction => {
     const map: Direction[] = [N, E, S, W];
     const index = map.indexOf(current);
@@ -40,7 +40,7 @@ const factor = {
     S: -1,
     N: 1,
 };
-const shipNav: StateChangeMap<Ship> = {
+const shipNav: ActionMap<Ship> = {
     N: ([x, y, f], v) => [x, y + v, f],
     S: ([x, y, f], v) => [x, y - v, f],
     E: ([x, y, f], v) => [x + v, y, f],
@@ -53,7 +53,7 @@ const shipNav: StateChangeMap<Ship> = {
         f,
     ],
 };
-const snwpNav: StateChangeMap<Snwp> = {
+const snwpNav: ActionMap<Snwp> = {
     N: ([x, y, wx, wy], v) => [x, y, wx, wy + v],
     S: ([x, y, wx, wy], v) => [x, y, wx, wy - v],
     E: ([x, y, wx, wy], v) => [x, y, wx + v, wy],
@@ -65,12 +65,12 @@ const snwpNav: StateChangeMap<Snwp> = {
 const lineToNav = (l: string) => [l[0], +l.substr(1)] as Navigation;
 const calculate = <T extends [number, number, ...any[]]>(
     ins: Navigation[],
-    stateChange: StateChangeMap<T>,
-    base: T
+    stateChange: ActionMap<T>,
+    initial: T
 ) => {
     const [x, y] = ins.reduce(
         (state, [action, value]) => stateChange[action](state, value),
-        base
+        initial
     );
     return Math.abs(x) + Math.abs(y);
 };
@@ -82,3 +82,5 @@ test('12', () => {
     expect(calculate(t, snwpNav, [0, 0, 10, 1] as Snwp)).toEqual(286);
     expect(calculate(i, snwpNav, [0, 0, 10, 1] as Snwp)).toEqual(178986);
 });
+
+// https://ajay-bhosale.medium.com/typescript-using-advances-types-for-expressive-code-c06679afd27
