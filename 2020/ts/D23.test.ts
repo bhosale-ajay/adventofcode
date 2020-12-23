@@ -1,94 +1,68 @@
-export interface Cup {
-    label: number;
-    prev: Cup;
-    next: Cup;
-}
+type Circle = [firstCup: number, cups: number[]];
 
-type Circle = [firstCup: Cup, max: number, cups: Map<number, Cup>];
-
-const insertAfter = (current: Cup, label: number): Cup => {
-    const currentNext = current.next;
-    const newCup = { label, prev: current, next: currentNext };
-    current.next = newCup;
-    currentNext.prev = newCup;
-    return newCup;
-};
-
-const buildCircle = (items: number[], extra: number): Circle => {
-    const cups = new Map<number, Cup>();
-    const firstCup = { label: items[0] } as Cup;
-    firstCup.prev = firstCup;
-    firstCup.next = firstCup;
-    cups.set(firstCup.label, firstCup);
+const buildCircle = (labels: number[], extra: number): Circle => {
+    const cups = [];
+    const firstCup = labels[0];
     let current = firstCup;
-    for (let i = 1; i < items.length; i++) {
-        current = insertAfter(current, items[i]);
-        cups.set(items[i], current);
+    for (const label of labels) {
+        cups[current] = label;
+        current = label;
     }
     for (let label = 10; label <= extra; label++) {
-        current = insertAfter(current, label);
-        cups.set(label, current);
+        cups[current] = label;
+        current = label;
     }
-    return [firstCup, extra || 9, cups];
+    cups[current] = firstCup;
+    return [firstCup, cups];
 };
 
-const play = (ip: string, moves: number, extra = 0): Cup => {
+const playCups = (ip: string, moves: number, extra = 0): number[] => {
     const cupLabels = ip.split('').map(n => +n);
-    const [root, maxLabel, cups] = buildCircle(cupLabels, extra);
+    const [root, cups] = buildCircle(cupLabels, extra);
+    const maxLabel = cups.length - 1;
     let current = root;
     for (let m = 1; m <= moves; m++) {
-        const p1 = current.next;
-        const p2 = p1.next;
-        const p3 = p2.next;
-        const p4 = p3.next;
-
-        const picked = [p1.label, p2.label, p3.label];
-
-        let destLabel = current.label;
-        let seek = true;
-        while (seek) {
-            destLabel = destLabel - 1;
-            if (destLabel === 0) {
-                destLabel = maxLabel;
+        const p1 = cups[current];
+        const p2 = cups[p1];
+        const p3 = cups[p2];
+        const p4 = cups[p3];
+        const picked = [p1, p2, p3];
+        let destination = current;
+        do {
+            destination = destination - 1;
+            if (destination === 0) {
+                destination = maxLabel;
             }
-            seek = picked.includes(destLabel);
-        }
-        const dest = cups.get(destLabel) as Cup;
-        const destNext = dest.next;
-
-        current.next = p4;
-        p4.prev = current;
-
-        dest.next = p1;
-        p1.prev = dest;
-
-        destNext.prev = p3;
-        p3.next = destNext;
-
+        } while (picked.includes(destination));
+        cups[current] = p4;
+        cups[p3] = cups[destination];
+        cups[destination] = p1;
         current = p4;
     }
-    return cups.get(1) as Cup;
+    return cups;
 };
 
 const labelsAfter1 = (ip: string, moves = 100): string => {
-    let { next } = play(ip, moves, 0);
+    const cups = playCups(ip, moves);
     let result = '';
-    while (next.label !== 1) {
-        result = result + next.label;
-        next = next.next;
+    let current = cups[1];
+    while (current !== 1) {
+        result = result + current;
+        current = cups[current];
     }
     return result;
 };
 
 const findStars = (ip: string): number => {
-    const { next } = play(ip, 10000000, 1000000);
-    return next.label * next.next.label;
+    const cups = playCups(ip, 10000000, 1000000);
+    const nextToOne = cups[1];
+    return nextToOne * cups[nextToOne];
 };
 
 test('23', () => {
-    expect(labelsAfter1('389125467', 10)).toEqual('92658374');
+    // expect(labelsAfter1('389125467', 10)).toEqual('92658374');
     // expect(labelsAfter1('389125467')).toEqual('67384529');
-    // expect(labelsAfter1('792845136')).toEqual('98742365');
+    expect(labelsAfter1('792845136')).toEqual('98742365');
     // expect(findStars('389125467')).toEqual(149245887792);
     expect(findStars('792845136')).toEqual(294320513093);
 });
