@@ -8,3 +8,4 @@ let readLines fileName = Path.Combine(basePath, $"{fileName}.txt") |> File.ReadA
 
 let mapLinesToNumber : string -> int[] = readLines >> Array.map int
 
+let mapLines mapper fileName = fileName |> readLines |> Array.map mapper
