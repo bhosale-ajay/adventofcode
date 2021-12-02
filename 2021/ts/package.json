@@ -1,0 +1,29 @@
+{
+    "name": "advent-of-code-2021",
+    "version": "1.0.0",
+    "description": "Advent of code 2021 solutions with typescript",
+    "main": "index.js",
+    "author": "Ajay Bhosale",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest --env=node --colors --detectOpenHandles",
+        "ts": "ts-node",
+        "lint": "prettier --write **/**.ts & eslint *.ts"
+    },
+    "devDependencies": {
+        "@types/jest": "^27.0.3",
+        "@types/node": "^16.11.11",
+        "@typescript-eslint/eslint-plugin": "^5.5.0",
+        "@typescript-eslint/parser": "^5.5.0",
+        "eslint": "^8.3.0",
+        "eslint-config-prettier": "^8.3.0",
+        "jest": "^27.4.2",
+        "prettier": "^2.5.0",
+        "ts-jest": "^27.0.7",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.5.2"
+    },
+    "dependencies": {
+        "dotless": "^1.2.0"
+    }
+}

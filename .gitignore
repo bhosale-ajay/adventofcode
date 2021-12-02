@@ -1,5 +1,3 @@
-**/2016/node_modules/*
-**/2016/dist/*
-**/2017/node_modules/*
-**/2017/dist/*
-**/2017/yarn-error.log
+**/**/node_modules/*
+**/**/dist/*
+**/**/yarn-error.log
