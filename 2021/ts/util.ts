@@ -16,8 +16,8 @@ export function mapLine<T>(
     return getInput(fileName).split(separator).map(selector);
 }
 
-export function mapLineToNumber(fileName: string): number[] {
+export function mapLineToNumber(fileName: string, separator = '\n'): number[] {
     return getInput(fileName)
-        .split('\n')
+        .split(separator)
         .map(n => +n);
 }
