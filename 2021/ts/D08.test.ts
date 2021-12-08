@@ -36,9 +36,9 @@ const deductionMapFor235: Record<number, string[]> = {
     // if a segment appears for 3 times
     // for 2, 3, and 5 then it means
     // it can be considered a, d, and g segment
-    3: [a, d, g], 
-    2: [c, f], 
-    1: [b, e], 
+    3: [a, d, g],
+    2: [c, f],
+    1: [b, e],
 };
 
 const deductionMapFor069: Record<number, string[]> = {
