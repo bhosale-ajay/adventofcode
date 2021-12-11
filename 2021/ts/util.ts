@@ -66,3 +66,16 @@ export const gridBoundChecker = <T>(
         0 <= ar && ar < rc && 0 <= ac && ac <= cc;
 };
 export type BoundChecker = ReturnType<typeof gridBoundChecker>;
+
+export const neighborAddressesALL = (r: number, c: number): GridLocation[] => [
+    [r - 1, c - 1], // Top Left
+    [r - 1, c + 0], // Top
+    [r - 1, c + 1], // Top Right
+
+    [r + 0, c - 1], // Left
+    [r + 0, c + 1], // Right
+
+    [r + 1, c - 1], // Bottom Left
+    [r + 1, c + 0], // Bottom
+    [r + 1, c + 1], // Bottom Right
+];
