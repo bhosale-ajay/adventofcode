@@ -24,7 +24,7 @@ export function mapLineToNumber(fileName: string, separator = '\n'): number[] {
 
 export type Grid<T> = T[][];
 export type GridLocation = [row: number, column: number];
-export const neighborAddresses = (r: number, c: number): GridLocation[] => [
+export const neighborAddressesST = (r: number, c: number): GridLocation[] => [
     [r - 1, c], // Top
     [r, c - 1], // Left
     [r, c + 1], // Right
@@ -33,6 +33,7 @@ export const neighborAddresses = (r: number, c: number): GridLocation[] => [
 
 export function mapGrid<T, U>(
     grid: Grid<T>,
+    neighborFinder: (r: number, c: number) => GridLocation[],
     mapper: (item: T, itemLocation: GridLocation, neighbors: T[]) => U
 ): U[] {
     const rowCount = grid.length;
@@ -46,7 +47,7 @@ export function mapGrid<T, U>(
                 mapper(
                     grid[ri][ci],
                     [ri, ci],
-                    neighborAddresses(ri, ci)
+                    neighborFinder(ri, ci)
                         .filter(withInBound)
                         .map(([nr, nc]) => grid[nr][nc])
                 )

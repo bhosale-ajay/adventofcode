@@ -3,7 +3,7 @@ import {
     gridBoundChecker,
     mapGrid,
     mapLine,
-    neighborAddresses,
+    neighborAddressesST,
     BoundChecker,
     Grid,
     GridLocation,
@@ -27,7 +27,7 @@ function exploreBasin(
     visited: Set<string>
 ): number {
     let basinSize = 1;
-    for (const np of neighborAddresses(ri, ci).filter(isBasin)) {
+    for (const np of neighborAddressesST(ri, ci).filter(isBasin)) {
         const locationKey = np.toString();
         if (visited.has(locationKey)) {
             continue;
@@ -44,7 +44,9 @@ const basinChecker =
 
 const solve = (fn: string) => {
     const area = mapLine(fn, lineToPoints) as Area;
-    const riskyPoints = mapGrid(area, pointCheck).filter(([r]) => r > 0);
+    const riskyPoints = mapGrid(area, neighborAddressesST, pointCheck).filter(
+        ([r]) => r > 0
+    );
     const isBasin = basinChecker(area, gridBoundChecker(area));
     const visited = new Set<string>();
     let sumOfRisks = 0;
