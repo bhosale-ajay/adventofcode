@@ -26,23 +26,23 @@ let solve (fn: string) =
     let rec check (visited: Set<string>) (singleVisit: bool) (current: string) =
         match current with
         | "end" -> 1
+        | _ when
+            visited.Contains current
+            && (singleVisit || current = "start")
+            ->
+            0
         | _ ->
-            match visited.Contains current
-                  && (singleVisit || current = "start")
-                with
-            | true -> 0
-            | false ->
-                let updatedSingleVisit = visited.Contains current || singleVisit
+            let updatedSingleVisit = visited.Contains current || singleVisit
 
-                let updatedVisited =
-                    if Char.IsLower(current.[0]) then
-                        visited.Add(current)
-                    else
-                        visited
+            let updatedVisited =
+                if Char.IsLower(current.[0]) then
+                    visited.Add(current)
+                else
+                    visited
 
-                caveMap.[current]
-                |> Array.map (check updatedVisited updatedSingleVisit)
-                |> Array.sum
+            caveMap.[current]
+            |> Array.map (check updatedVisited updatedSingleVisit)
+            |> Array.sum
 
     (check Set.empty true "start", check Set.empty false "start")
 
