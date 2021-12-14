@@ -57,8 +57,7 @@ let paper : Paper =
 let foldedPaper =
     Regex.Matches(input, foldRegEx)
     |> Seq.map lineToFoldInstruction
-    |> Seq.toList
-    |> List.fold fold paper
+    |> Seq.fold fold paper
 
 for y in 0..6 do
     for x in 0..40 do
