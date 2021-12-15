@@ -63,9 +63,12 @@ const findPath = (positions: Grid<Position>): number => {
         }
         const current = getPosition(locations[selectedIndex]);
         locations.splice(selectedIndex, 1);
- 
+
         current.visited = true;
         for (const linkAddress of current.links) {
+            if (linkAddress[0] === size - 1 && linkAddress[1] === size - 1) {
+                return current.totalRisk + getPosition(linkAddress).risk;
+            }
             const link = getPosition(linkAddress);
             if (link.visited) {
                 continue;
