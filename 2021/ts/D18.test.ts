@@ -44,9 +44,7 @@ const split = (pair: Pair, index: number) => {
 };
 
 const add = (a: Pair, b: Pair) => {
-    const result = a
-        .map(([v, d]) => [v, d + 1])
-        .concat(b.map(([v, d]) => [v, d + 1])) as Pair;
+    const result = a.concat(b).map(([v, d]) => [v, d + 1]) as Pair;
     // console.log(`after addition:\t${result}`);
     // eslint-disable-next-line no-constant-condition
     while (true) {
