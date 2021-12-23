@@ -27,6 +27,7 @@
     <Compile Include="D15.fs" />
     <Compile Include="D16.fs" />
     <Compile Include="D21.fs" />
+    <Compile Include="D22.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
