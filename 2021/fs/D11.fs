@@ -26,7 +26,8 @@ let neighbors (rc: int, cc: int) (r: int, c: int) =
 
 let resetAndIncrementEnergeyLevel (o: int [,]) =
     o
-    |> Array2D.iteri (fun ri ci el -> o.[ ri, ci ] <- (el % 10) + 1)
+    |> Array2D.iteri (fun ri ci el -> o.[ri, ci] <- (el % 10) + 1)
+
     o
 
 let isReadyForFlash ri ci el = if el > 9 then Some(ri, ci) else None
@@ -39,12 +40,12 @@ let findReadyToFlash (os: int [,]) =
     |> Seq.toList
 
 let updadeNeighbors (os: int [,]) ((ri, ci): int * int) =
-    let el = os.[ ri, ci ]
+    let el = os.[ri, ci]
 
     if el <= 9 then
-        os.[ ri, ci ] <- el + 1
+        os.[ri, ci] <- el + 1
 
-        if os.[ ri, ci ] > 9 then
+        if os.[ri, ci] > 9 then
             Some(ri, ci)
         else
             None
@@ -66,9 +67,6 @@ let rec flash (neighborFinder: NeighborFinder) (neighborUpdater: NeighborUpdater
     flashLocations seed
 
 let solve (fn: string) =
-    let mutable totalFlashed = 0
-    let mutable stepIndex = 1
-    let mutable fullFlashStep = 0
     let os = parse fn
     let rowCount = Array2D.length1 os
     let colCount = Array2D.length2 os
@@ -76,28 +74,30 @@ let solve (fn: string) =
     let neighborUpdater = updadeNeighbors os
     let flasher = flash neighborFinder neighborUpdater
 
-    while stepIndex <= 100 || fullFlashStep = 0 do
+    let rec check stepIndex totalFlashed fullFlashStep =
         let flashed =
             os
             |> resetAndIncrementEnergeyLevel
             |> findReadyToFlash
             |> flasher
 
-        fullFlashStep <-
+        let ffs =
             if flashed = 100 && fullFlashStep = 0 then
                 stepIndex
             else
                 fullFlashStep
 
-        totalFlashed <-
+        let tf =
             if stepIndex <= 100 then
                 totalFlashed + flashed
             else
                 totalFlashed
 
-        stepIndex <- stepIndex + 1
+        match stepIndex < 100 || ffs = 0 with
+        | true -> check (stepIndex + 1) tf ffs
+        | false -> tf, ffs
 
-    (totalFlashed, fullFlashStep)
+    check 1 0 0
 
 [<Theory>]
 [<InlineData("11-test", 1656, 195)>]
