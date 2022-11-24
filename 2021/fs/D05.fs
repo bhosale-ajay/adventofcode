@@ -50,23 +50,23 @@ let dataToLines (fn: string) =
     |> Seq.map matchToLine
     |> Seq.toList
 
-let getPointsByLineType (lineType: LineType) (lines : Line list) =
-    lines
-    |> List.filter (fun l -> l.lineType = lineType)
-    |> List.map (fun l -> l.points)
-    |> List.concat
-
-let countIntersections (ps: string list) =
-    ps
+let countIntersections (ls: Line list) =
+    ls
+    |> List.collect (fun l -> l.points)
     |> List.countBy id
     |> List.filter (fun (_, c) -> c > 1)
     |> List.length
 
 let solve (fn: string) =
-    let lines = fn |> dataToLines
-    let hnvPoints = lines |> getPointsByLineType LineType.HorizontalOrVertical
-    let diagonalPoints = lines |> getPointsByLineType LineType.Diagonal
-    (countIntersections hnvPoints, countIntersections (hnvPoints @ diagonalPoints))
+    let lines = 
+        fn 
+        |> dataToLines 
+
+    let hnvLines =
+        lines
+        |> List.filter (fun l -> l.lineType = LineType.HorizontalOrVertical)
+
+    (countIntersections hnvLines, countIntersections lines)
 
 [<Theory>]
 [<InlineData("05-test", 5, 12)>]
