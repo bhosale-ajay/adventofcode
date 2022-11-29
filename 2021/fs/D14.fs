@@ -14,16 +14,16 @@ let increment<'Key when 'Key : comparison> (key : 'Key) (by: int64) (cm : CountM
     let value = cm.TryFind key |> Option.defaultValue 0L
     cm.Add (key, (value + by))
 
-let charsToString (a: char, b : char) = a.ToString() + b.ToString()
+let inline charsToKey a b = sprintf "%c%c" a b
 
 // Given  AB -> C
 // Return (AB, (AC, CB, C))
 let lineToRule (l:string) =
     (
-        charsToString (l[0],l[1]),
+        charsToKey l[0] l[1],
         (
-         charsToString (l[0],l[6]),
-         charsToString (l[6],l[1]),
+         charsToKey l[0] l[6],
+         charsToKey l[6] l[1],
          l[6]
         )
     )
@@ -57,7 +57,7 @@ let solve (fn: string) (times : int) =
         input[0]
         |> Seq.pairwise
         |> Seq.countBy id
-        |> Seq.map (fun (key, count) -> (charsToString key, int64 count))
+        |> Seq.map (fun (key, count) -> (key ||> charsToKey , int64 count))
         |> Map
     let rules : RuleMap =
         input
