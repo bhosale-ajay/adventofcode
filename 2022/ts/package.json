@@ -1,0 +1,27 @@
+{
+    "name": "advent-of-code-2022",
+    "version": "1.0.0",
+    "description": "Advent of code 2022 solutions with typescript",
+    "main": "index.js",
+    "author": "Ajay Bhosale",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest --env=node --colors --detectOpenHandles",
+        "ts": "ts-node",
+        "lint": "prettier --write **/**.ts & eslint *.ts"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.2.3",
+        "@types/node": "^18.11.10",
+        "@typescript-eslint/eslint-plugin": "^5.45.0",
+        "@typescript-eslint/parser": "^5.45.0",
+        "dotless": "^1.2.0",
+        "eslint": "^8.28.0",
+        "eslint-config-prettier": "^8.5.0",
+        "jest": "^29.3.1",
+        "prettier": "^2.8.0",
+        "ts-jest": "^29.0.3",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.3"
+    }
+}
