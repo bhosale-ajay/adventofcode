@@ -16,7 +16,7 @@ let folder (c , m) = function
 let solve fileName = 
     let (_, (m1, m2, m3)) =
         fileName 
-        |> seqOfLines
+        |> seqOfLinesWEE
         |> Seq.fold folder (0, (0,0,0))
     (m1, m1 + m2 + m3)
 
@@ -27,5 +27,3 @@ let test01 fn ep1 ep2  =
     let (ap1, ap2) = solve fn
     Assert.Equal(ep1, ap1)
     Assert.Equal(ep2, ap2)
-
-
