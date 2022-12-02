@@ -12,6 +12,10 @@ let seqOfLinesWEE fileName =
         yield "";
     }
 
+let seqOfLines fileName =
+    Path.Combine(basePath, $"{fileName}.txt")
+    |> File.ReadLines
+    
 let (|Integer|_|) (l : string) =
     match System.Int32.TryParse l with
     | (true, number) -> Some number
