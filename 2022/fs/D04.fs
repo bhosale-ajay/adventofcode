@@ -10,7 +10,7 @@ type Pairs =
         (self.s1 <= self.s2 && self.e2 <= self.e1) 
         || 
         (self.s2 <= self.s1 && self.e1 <= self.e2)
-    member self.isOverLap() =
+    member self.isOverlap() =
         (self.s1 <= self.s2 && self.s2 <= self.e1) 
         || 
         (self.s2 <= self.s1 && self.s1 <= self.e2);
@@ -24,7 +24,7 @@ let (|Pairs|_|) (l: string) =
 let folder (sumP1, sumP2) = function
     | Pairs p -> (
             (if p.isFullyContain() then sumP1 + 1 else sumP1), 
-            (if p.isOverLap() then sumP2 + 1 else sumP2)
+            (if p.isOverlap() then sumP2 + 1 else sumP2)
         )
     | _ -> (sumP1, sumP2)
 
