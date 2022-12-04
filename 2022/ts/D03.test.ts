@@ -32,7 +32,7 @@ const solve = (ip: string) =>
         [0, 0, ''] as [number, number, string]
     );
 
-test('02', () => {
+test('03', () => {
     const t = solve('03-test');
     const a = solve('03');
     expect(t).toEqual([157, 70, '']);
