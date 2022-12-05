@@ -36,7 +36,7 @@ let solve fileName =
 [<Theory>]
 [<InlineData("04-test", 2, 4)>]
 [<InlineData("04", 453, 919)>]
-let test03 fn ep1 ep2  =
+let test04 fn ep1 ep2  =
     let (ap1, ap2) = solve fn
     Assert.Equal(ep1, ap1)
     Assert.Equal(ep2, ap2)
