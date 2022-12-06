@@ -20,3 +20,7 @@ let (|Integer|_|) (l : string) =
     match System.Int32.TryParse l with
     | (true, number) -> Some number
     | (false, _)     -> None
+
+let readFile fileName =
+    Path.Combine(basePath, $"{fileName}.txt")
+    |> File.ReadAllText
