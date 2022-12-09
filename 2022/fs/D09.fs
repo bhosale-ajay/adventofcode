@@ -37,7 +37,7 @@ let fold ((knots, v1, v2) : State) action =
 
 let solve fn =
     let seed = (
-        Array.init 10 (fun _ -> 0, 0),
+        Array.create 10 (0, 0),
         Set.empty.Add(string (0, 0)),
         Set.empty.Add(string (0, 0))
     )
