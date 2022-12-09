@@ -61,7 +61,7 @@ const solve = (fn: string) => {
     return [p1, p2];
 };
 
-test('07', () => {
+test('08', () => {
     const t = solve('08-test');
     const a = solve('08');
     expect(t).toEqual([21, 8]);
