@@ -24,3 +24,13 @@ let (|Integer|_|) (l : string) =
 let readFile fileName =
     Path.Combine(basePath, $"{fileName}.txt")
     |> File.ReadAllText
+    |> fun t -> t.Replace("\r", "")
+
+let splitFile (splitBy: string) fileName =
+    fileName
+    |> readFile
+    |> fun s -> s.Split(splitBy)
+
+let repeat f times =
+    [1..times]
+    |> Seq.iter (fun _ -> f())
