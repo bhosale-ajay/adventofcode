@@ -10,7 +10,7 @@ export function getLines(fileName: string, separator = '\n'): string[] {
 
 export function mapLine<T>(
     fileName: string,
-    selector: (l: string) => T,
+    selector: (l: string, index: number) => T,
     separator = '\n'
 ): T[] {
     return getInput(fileName).split(separator).map(selector);
