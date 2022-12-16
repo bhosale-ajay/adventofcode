@@ -26,10 +26,7 @@ const buildTimeMap = (m: ValveMap): [TimeMap, string[]] => {
     const timeMap: TimeMap = {};
     const keyValves = Object.keys(m).filter(vn => m[vn].flowRate > 0);
     keyValves.push('AA');
-    for (const vn of Object.keys(m)) {
-        if (!keyValves.includes(vn)) {
-            continue;
-        }
+    for (const vn of keyValves) {
         const queue = [vn];
         const distMap: DistanceMap = { [vn]: 0 };
         const visited = new Set<string>().add(vn);
