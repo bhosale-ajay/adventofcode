@@ -45,11 +45,12 @@ const buildTimeMap = (m: ValveMap): [TimeMap, string[]] => {
         }
         timeMap[vn] = distMap;
     }
-    return [timeMap, keyValves];
+    // sorting is key here, otherwise `extendBestFlowMap` has to sort each time
+    return [timeMap, keyValves.filter(k => k !== 'AA').sort()];
 };
 const solve = (fn: string) => {
     const valveMap = parse(fn);
-    const [timeMap, keyValves] = buildTimeMap(valveMap);
+    const [timeMap, valvesWF] = buildTimeMap(valveMap);
     const openValve = (cv: string, time: number, next: string[]) => {
         next = next.filter(n => n !== cv);
         let bestFlow = 0;
@@ -64,8 +65,8 @@ const solve = (fn: string) => {
         }
         return bestFlow;
     };
-    const p1 = openValve('AA', 30, keyValves);
-    // part 2 based on solution from User avatar @i_have_no_biscuits
+    const p1 = openValve('AA', 30, valvesWF);
+    // part 2 based on solution from User @i_have_no_biscuits
     const bestFlowMap: Dictionary<number> = {};
     const recordPath = (
         cv: string,
@@ -73,19 +74,16 @@ const solve = (fn: string) => {
         path: string[],
         pathFlow: number
     ) => {
-        const next = keyValves.filter(kv => kv !== 'AA' && !path.includes(kv));
-        const pathKey = [...path].sort().join('');
-        bestFlowMap[pathKey] = Math.max(bestFlowMap[pathKey] || 0, pathFlow);
-        let bestFlow = 0;
+        const next = valvesWF.filter(kv => !path.includes(kv));
         for (const nv of next) {
             const timeLeft = time - timeMap[cv][nv] - 1;
             if (timeLeft > 0) {
-                let flow = valveMap[nv].flowRate * timeLeft;
-                flow = recordPath(nv, timeLeft, [nv, ...path], flow + pathFlow);
-                bestFlow = Math.max(flow, bestFlow);
+                const flow = valveMap[nv].flowRate * timeLeft;
+                recordPath(nv, timeLeft, [...path, nv], flow + pathFlow);
             }
         }
-        return bestFlow;
+        const pathKey = path.sort().join('');
+        bestFlowMap[pathKey] = Math.max(bestFlowMap[pathKey] || 0, pathFlow);
     };
     recordPath('AA', 26, [], 0);
     const extendBestFlowMap = (options: string[]) => {
@@ -100,12 +98,11 @@ const solve = (fn: string) => {
         }
         return bestFlowMap[pathKey];
     };
-    // sorting is key here, otherwise `extendBestFlowMap` has to sort each time
-    const keyValvesExpectAA = keyValves.filter(k => k !== 'AA').sort();
-    extendBestFlowMap(keyValvesExpectAA);
+
+    extendBestFlowMap(valvesWF);
     let p2 = 0;
     for (const humanWork of Object.keys(bestFlowMap)) {
-        const elephantWork = keyValvesExpectAA.reduce(
+        const elephantWork = valvesWF.reduce(
             (k, v) => (humanWork.includes(v) ? k : k + v),
             ''
         );
