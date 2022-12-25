@@ -105,6 +105,6 @@ const solve = (fn: string, mt: number) => {
 };
 
 test('24', () => {
-    expect(solve('24-test', 20)).toEqual([18, 54]);
+    expect(solve('24-test', 23)).toEqual([18, 54]);
     // expect(solve('24', 338)).toEqual([322, 974]);
 });
