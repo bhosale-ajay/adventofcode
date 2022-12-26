@@ -2,6 +2,14 @@
 
 open Common
 open Xunit
+open System.Collections.Generic
+
+type LocationQueue = Queue<int * int * int>
+
+let nextItem (q : LocationQueue) =
+    match q.Count with
+    | 0 -> None
+    | _ -> Some (q.Dequeue())
 
 let next (r, c) =
     [
@@ -27,8 +35,9 @@ let walk (d: string array) sr sc dr dc baseTime mt =
         let p = a - ((t + 1) % s)
         if p < 1 then p + s else p
 
-    let updateQueueAndVisited t (q, v) (r, c) =
-        q @ [(r, c, (t + 1))], v |> Set.add (r, c, (t + 1) % f)
+    let updateQueueAndVisited t (q : LocationQueue, v) (r, c) =
+        q.Enqueue(r, c, (t + 1))
+        q, v |> Set.add (r, c, (t + 1) % f)
 
     let notVisiitedAndEmpty visited t (r, c) =
         0 <= r && r < rows && 0 <= c && c < cols && d[r][c] <> '#' &&
@@ -36,21 +45,23 @@ let walk (d: string array) sr sc dr dc baseTime mt =
         d[r][drp c t sw] <> '>' && d[r][ulp c t sw] <> '<' &&
         not (Set.contains (r, c, (t + 1) % f) visited)
 
-    let rec loop (queue, visited) =
-        match queue with
-        | (_r, _c, t) :: tail when t - baseTime > mt -> loop (tail, visited)
-        | (r, c, t) :: tail ->
+    let rec loop (queue : LocationQueue, visited) =
+        match nextItem queue with
+        | Some (_, _, t)  when t - baseTime > mt -> loop (queue, visited)
+        | Some (r, c, t) ->
             let nl = (r, c) |> next
             if nl |> Seq.contains (dr, dc) then
                 t + 1
             else
                 nl
                 |> Seq.filter (notVisiitedAndEmpty visited t)
-                |> Seq.fold (updateQueueAndVisited t) (tail, visited)
+                |> Seq.fold (updateQueueAndVisited t) (queue, visited)
                 |> loop
         | _ -> -1
 
-    loop ([(sr, sc, baseTime)], Set.empty)
+    let queue = LocationQueue();
+    queue.Enqueue(sr, sc, baseTime)
+    loop (queue, Set.empty)
 
 let solve fn mt =
     let data =
