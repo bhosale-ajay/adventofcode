@@ -1,6 +1,7 @@
 ﻿module D10
 
 open Common
+open Xunit
 
 type State = int * int * int * int * string
 
@@ -28,8 +29,11 @@ let solve fn =
         |> seqOfLines
         |> Seq.collect cycleSeq
         |> Seq.fold cycle (0, 0, 1, 0, "")
-    printfn "%d" i
-    printfn "%s" crt
+    i, crt
 
-solve "10-test"
-solve "10"
+[<Theory>]
+[<InlineData("10-test", 13140)>]
+[<InlineData("10", 14320)>]
+let test10 fn ep1 =
+    let ap1, _ = solve fn
+    Assert.Equal(ep1, ap1)
