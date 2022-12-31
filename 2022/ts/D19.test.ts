@@ -86,8 +86,10 @@ const findMaxGeodes = (
     for (const type of ROBOT_TYPES) {
         if (
             state.timer < limits[type] ||
+            blueprint.robotLimit[type] < state.bots[type] ||
             (type === ORE_ROBOT && state.bots[CLAY_ROBOT] > 1) ||
-            blueprint.robotLimit[type] < state.bots[type]
+            (type === OBSIDIAN_ROBOT && state.bots[CLAY_ROBOT] === 0) ||
+            (type === GEODE_ROBOT && state.bots[OBSIDIAN_ROBOT] === 0)
         ) {
             continue;
         }
