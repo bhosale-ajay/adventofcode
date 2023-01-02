@@ -27,6 +27,7 @@
     <Compile Include="D15.fs" />
     <Compile Include="D16.fs" />
     <Compile Include="D17.fs" />
+    <Compile Include="D17-BO.fs" />
     <Compile Include="D20.fs" />
     <Compile Include="D21.fs" />
     <Compile Include="D23.fs" />
