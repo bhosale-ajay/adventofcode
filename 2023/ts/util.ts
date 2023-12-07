@@ -1,0 +1,29 @@
+import { readFileSync } from 'fs';
+
+export function getInput(fileName: string): string {
+    return readFileSync(`../inputs/${fileName}.txt`, 'utf8').replace(/\r/g, '');
+}
+
+export function getLines(fileName: string, separator = '\n'): string[] {
+    return getInput(fileName).split(separator);
+}
+
+export function mapLine<T>(
+    fileName: string,
+    selector: (l: string, index: number) => T,
+    separator = '\n',
+): T[] {
+    return getInput(fileName).split(separator).map(selector);
+}
+
+export function mapLineToNumber(fileName: string, separator = '\n'): number[] {
+    return getInput(fileName)
+        .split(separator)
+        .map(n => +n);
+}
+
+export interface Map<T> {
+    [details: string]: T;
+}
+
+export const toNumber = (n: string) => +n;
