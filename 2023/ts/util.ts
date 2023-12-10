@@ -27,3 +27,21 @@ export interface Map<T> {
 }
 
 export const toNumber = (n: string) => +n;
+
+export type Grid<T> = T[][];
+export type GridLocation = [row: number, column: number];
+export const neighborAddressesST = (r: number, c: number): GridLocation[] => [
+    [r - 1, c], // Top
+    [r, c - 1], // Left
+    [r, c + 1], // Right
+    [r + 1, c], // Bottom
+];
+export const gridBoundChecker = <T>(
+    grid: Grid<T>,
+): ((l: GridLocation) => boolean) => {
+    const rc = grid.length;
+    const cc = rc > 0 ? grid[0].length : 0;
+    return ([ar, ac]: GridLocation) =>
+        0 <= ar && ar < rc && 0 <= ac && ac <= cc;
+};
+export type BoundChecker = ReturnType<typeof gridBoundChecker>;
