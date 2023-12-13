@@ -61,7 +61,9 @@ const solve = (fn: string): [number, number] => {
     for (const symbol of symbols) {
         const key = `${symbol.line}:${symbol.start}`;
         touchedArea.add(key);
-        gearArea.set(key, symbol);
+        if (symbol.value == '*') {
+            gearArea.set(key, symbol);
+        }
     }
     let p1 = 0;
     for (const partNumber of partNumbers) {
