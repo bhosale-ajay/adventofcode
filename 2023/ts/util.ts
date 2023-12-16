@@ -41,7 +41,6 @@ export const gridBoundChecker = <T>(
 ): ((l: GridLocation) => boolean) => {
     const rc = grid.length;
     const cc = rc > 0 ? grid[0].length : 0;
-    return ([ar, ac]: GridLocation) =>
-        0 <= ar && ar < rc && 0 <= ac && ac <= cc;
+    return ([ar, ac]: GridLocation) => 0 <= ar && ar < rc && 0 <= ac && ac < cc;
 };
 export type BoundChecker = ReturnType<typeof gridBoundChecker>;
