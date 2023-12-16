@@ -1,8 +1,6 @@
 import { ascendingBy } from 'dotless';
 import { getInput } from './util';
 
-// type Step = [string[], number];
-
 type Step = {
     value: number;
     box: number;
