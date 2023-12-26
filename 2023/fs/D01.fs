@@ -18,7 +18,7 @@ let valuesP2 = (tokensP1 @ tokensP2) |> Map.ofSeq
 
 let forward (l: string) = [ 0 .. l.Length ]
 
-let backword (l: string) = [ l.Length .. -1 .. 0 ]
+let backward (l: string) = [ l.Length .. -1 .. 0 ]
 
 let search direction (tokens: string seq) values (l: string) =
     l
@@ -30,7 +30,7 @@ let search direction (tokens: string seq) values (l: string) =
     |> Option.defaultValue 0
 
 let parseLine tokens values (l: string) =
-    ((search forward tokens values l) * 10) + (search backword tokens values l)
+    ((search forward tokens values l) * 10) + (search backward tokens values l)
 
 let solve fileName values =
     let tokens = values |> Map.keys
